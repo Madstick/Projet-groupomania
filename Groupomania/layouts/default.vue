@@ -1,18 +1,29 @@
 <template>
-  <div>
-    <div id="nav">
-      <nuxt-link to="/messages">Messages</nuxt-link>
-    </div>
-    <Nuxt />
-  </div>
+    <v-app>
+      <v-app-bar app color="blue">
+        <v-btn text to="/">Accueil</v-btn>
+        <v-btn text to="/admin" v-if="$auth.user && $auth.user.admin">Admin</v-btn>
+
+        <v-spacer />
+
+      <div v-if="$auth.loggedIn">
+        {{ $auth.user.username }}
+        <v-btn text @click="$auth.logout()">Se déconnecter</v-btn>
+      </div>
+      <div v-else>
+        <v-btn text to="/user/login">Connexion</v-btn>
+        <v-btn text to="/user/register">Inscription</v-btn>
+      </div>
+      </v-app-bar>  
+
+    <v-main>
+      <Nuxt />
+    </v-main>  
+    </v-app>
 </template>
 
 <style>
-#nav {
-  height: 40px;
-  width: 100%;
-  background-color: grey;
-}
+
 
 html {
   font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',

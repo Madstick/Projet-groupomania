@@ -87,6 +87,20 @@ exports.getAllUsers = (req, res, next) => {
   )
 }
 
+exports.current = (req, res, next) => {
+  conn.query(
+    'SELECT idUSERS, username, isAdmin, bio, email FROM groupomania.users WHERE idUsers= ?',
+    req.userId,
+    function (error, results, fields) {
+      if (error) {
+        return res.status(400).json(error)
+      }
+      console.log(results)
+      return res.status(200).json({ user:results })
+    }
+  )
+}
+
 exports.deleteUser = (req, res, next) => {
   conn.query(
     `DELETE FROM users WHERE idUSERS=${req.params.id}`,
