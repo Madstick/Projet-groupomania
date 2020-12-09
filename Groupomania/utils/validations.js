@@ -5,7 +5,7 @@ let minLength = (propertyType, minLength) => {
     return v => {
       if(!v){ return true; }
   
-      return v.length >= minLength || `${propertyType} doit être au moins de ${minLength} charactères`;
+      return v.length >= minLength || `${propertyType} doit être plus de ${minLength} charactères`;
     }
   }
 let maxLength = (propertyType, maxLength) => {
