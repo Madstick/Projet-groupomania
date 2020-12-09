@@ -23,7 +23,7 @@ export default {
           loginInfo       
       })
       this.$store.dispatch('snackbar/setSnackbar', {text: 'Connexion'})
-      this.$router.push('/')
+      this.$router.push('/messages')
       }
       catch(error){
         console.log(error)

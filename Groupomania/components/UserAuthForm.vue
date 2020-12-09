@@ -30,7 +30,6 @@
         valid: false,
         showPassword: false,
         hasName: false,
-        hasBio: false,
         userInfo: {
           username: '',
           password: ''
@@ -38,7 +37,7 @@
         ...validations
       }
     },
-    props: ["submitForm", "buttonText", "hasName", "hasBio"]
+    props: ["submitForm", "buttonText", "hasName"]
   }
 </script>
 

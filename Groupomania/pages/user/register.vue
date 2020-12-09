@@ -20,8 +20,6 @@ export default {
         
         await this.$auth.loginWith('local', {
         data: 
-          // username: 'your_username',
-          // password: 'your_password'
           registrationInfo      
       })
       this.$store.dispatch('snackbar/setSnackbar', {text: 'Inscription réussi'})
