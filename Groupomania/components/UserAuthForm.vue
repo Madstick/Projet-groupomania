@@ -1,6 +1,6 @@
 <template>
   <v-form v-model="valid">
-    <v-text-field v-model="userInfo.name" 
+    <v-text-field v-model="userInfo.username" 
                   label="Nom d'utilisateur" 
                   :rules="[required('nom utilisateur')]"
                   v-if="hasName" />
@@ -31,7 +31,7 @@
         showPassword: false,
         hasName: false,
         userInfo: {
-          name:'',
+          username:'',
           email: '',
           password: ''
         },
