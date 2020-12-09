@@ -31,7 +31,7 @@
         showPassword: false,
         hasName: false,
         userInfo: {
-          username: '',
+          email: '',
           password: ''
         },
         ...validations

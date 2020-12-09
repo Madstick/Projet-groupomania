@@ -7,7 +7,7 @@
         <v-spacer />
 
       <div v-if="$auth.loggedIn">
-        {{ $auth.user.username }}
+        <v-btn text to="/user/my-account">{{ $auth.user.username }}</v-btn>
         <v-btn text @click="$auth.logout()">Se déconnecter</v-btn>
       </div>
       <div v-else>
