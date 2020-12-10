@@ -4,6 +4,9 @@
   <div>
     <UserAuthForm buttonText="Inscription" :submitForm="registerUser" hasName="true" />
   </div>  
+  <div>
+    <p>Règles d'utilisation : </p>
+  </div>
   </v-container>  
 </template>
 

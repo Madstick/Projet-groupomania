@@ -56,7 +56,7 @@ export default {
            login: {
              url: 'http://localhost:3000/api/auth/login',
              method: 'post',
-             propertyName: 'logintoken'
+             propertyName: 'token'
            },
            logout: true,
            user: {

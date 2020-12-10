@@ -13,7 +13,7 @@ let maxLength = (propertyType, maxLength) => {
   }
   
 let emailFormat = () => {
-    let regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,24})+$/
+    let regex = /^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(groupomania|)\.com$/
     return v => v && regex.test(v) || "Doit être un email valide"
   }
   

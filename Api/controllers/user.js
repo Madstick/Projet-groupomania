@@ -31,7 +31,7 @@ exports.login = (req, res, next) => {
   const passReq = req.body.password
   if (userReq && passReq) {
     conn.query(
-      'SELECT * FROM groupomania.users WHERE email= ?',
+      'SELECT * FROM users WHERE email= ?',
       userReq,
       function (_error, results, _fields) {
         if (results.length > 0) {
@@ -49,12 +49,11 @@ exports.login = (req, res, next) => {
                 privilege = 'member'
               }
               res.status(200).json({
-                logintoken: results,
                 userId: results[0].idUSERS,
                 username: results[0].username,
                 email: results[0].email,
                 privilege: privilege,
-                accessToken: jwt.sign(
+                token: jwt.sign(
                   { userId: results[0].idUSERS, role: privilege },
                   config.token,
                   { expiresIn: '24h' }
@@ -78,7 +77,7 @@ exports.login = (req, res, next) => {
 
 exports.getAllUsers = (req, res, next) => {
   conn.query(
-    'SELECT idUSERS, username, isAdmin, email FROM groupomania.users',
+    'SELECT idUSERS, username, isAdmin, email FROM users',
     function (error, results, fields) {
       if (error) {
         return res.status(400).json(error)
@@ -90,7 +89,7 @@ exports.getAllUsers = (req, res, next) => {
 
 exports.current = (req, res, next) => {
   conn.query(
-    'SELECT idUSERS, username, isAdmin, email FROM groupomania.users WHERE idUsers= ?',
+    'SELECT idUSERS, username, isAdmin, email FROM users WHERE idUsers= ?',
     req.userId,
     function (error, results, fields) {
       if (error) {
