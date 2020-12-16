@@ -23,8 +23,8 @@
             <label for="">Pièces jointes</label>
             <input type="file" ref="file"
               :class="{ 'is-invalid': errors && errors.attachment }"
-              @change = 'extractfile'
-              accept ="image/jpeg,image/png">
+              @change = 'handleFileUpload'
+              accept ="image/jpeg,image/jpg,image/png">
             <div class="invalid-feedback" v-if="errors && errors.attachment">
               {{ errors.attachment.msg }}
             </div>
@@ -40,7 +40,7 @@
             </div>
           </div>
 
-           <button @click="submitFile()">Envoyer</button>
+           <button @click="submitFile(),submitForm()" >Envoyer</button>
           <nuxt-link to="/messages">Cancel</nuxt-link>
 
         </form>
@@ -76,7 +76,7 @@ export default {
         /*
           Make the request to the POST /single-file URL
         */
-            this.$axios.post( 'http://localhost:3000/api/images/',
+            this.$axios.$post( 'http://localhost:3000/api/messages/createMessage',
                 formData,
                 {
                 headers: {
@@ -97,7 +97,7 @@ export default {
         this.file = this.$refs.file.files[0];
       },
     submitForm(){
-      this.$axios.post( 'http://localhost:3000/api/messages/', {
+      this.$axios.$post( 'http://localhost:3000/api/messages/createMessage', {
           title: this.title,
           content: this.content,
         })
