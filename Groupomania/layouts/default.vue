@@ -3,7 +3,7 @@
       <v-app-bar app color="blue">
         <div v-if="$auth.loggedIn">
           <v-btn text to='/messages'>Accueil</v-btn>
-          <v-btn text to="/admin" v-if="$auth.user && $auth.user.admin">Admin</v-btn>
+          <v-btn text to="/admin" v-if="$auth.user && $auth.user.isAdmin">Admin</v-btn>
         </div>
         <div v-else>
          <v-btn text to="/">Accueil</v-btn>
