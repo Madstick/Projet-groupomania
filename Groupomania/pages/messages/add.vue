@@ -64,7 +64,7 @@ export default {
     }
   },
   methods:{
-    submitFile(){
+    async submitFile(){
         /*
                 Initialize the form data
             */
@@ -76,7 +76,7 @@ export default {
         /*
           Make the request to the POST /single-file URL
         */
-            this.$axios.$post( 'http://localhost:3000/api/messages/createMessage',
+          await this.$axios.post( 'http://localhost:3000/api/messages',
                 formData,
                 {
                 headers: {
@@ -96,8 +96,8 @@ export default {
       handleFileUpload(){
         this.file = this.$refs.file.files[0];
       },
-    submitForm(){
-      this.$axios.$post( 'http://localhost:3000/api/messages/createMessage', {
+    async submitForm(){
+     await this.$axios.$post( 'http://localhost:3000/api/messages', {
           title: this.title,
           content: this.content,
         })
