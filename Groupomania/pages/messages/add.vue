@@ -55,6 +55,7 @@ export default {
   data(){
     return{
       message: {
+      idUSERS: this.$auth.idUSERS,
       title:null,
       attachment:null,
       content:null,
@@ -98,8 +99,7 @@ export default {
       },
     async submitForm(){
      await this.$axios.$post( 'http://localhost:3000/api/messages', {
-          title: this.title,
-          content: this.content,
+          message: this.message,
         })
         .then((response) => {
           console.log(response)
