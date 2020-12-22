@@ -1,4 +1,14 @@
 # Groupomania
 Projet Groupomania
 
-backend front-end et sql...
+backend 
+
+npm install
+nodemon server
+
+front-end 
+
+npm install
+npm run dev
+
+et sql...
