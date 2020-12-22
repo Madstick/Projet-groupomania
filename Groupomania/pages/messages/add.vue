@@ -21,7 +21,7 @@
 
           <div>
             <label for="">Pièces jointes</label>
-            <input type="file" ref="file"
+            <input type="file" ref="attachment"
               :class="{ 'is-invalid': errors && errors.attachment }"
               @change = 'handleFileUpload'
               accept ="image/jpeg,image/jpg,image/png">
@@ -40,7 +40,7 @@
             </div>
           </div>
 
-           <button @click="submitFile(),submitForm()" >Envoyer</button>
+           <button @click="submitForm()" >Envoyer</button>
           <nuxt-link to="/messages">Cancel</nuxt-link>
 
         </form>
@@ -55,52 +55,37 @@ export default {
   data(){
     return{
       message: {
-      idUSERS: this.$auth.idUSERS,
+      idUSERS: this.$auth.user[0].idUSERS,
       title:null,
-      attachment:null,
       content:null,
-      file:''
+      attachment:null,
+      created_at:null,
+      username: this.$auth.user[0].username,
       },
     errors:null
     }
   },
   methods:{
-    async submitFile(){
-        /*
-                Initialize the form data
-            */
-            let formData = new FormData();
+    async submitForm(){
+      let formData = new FormData();
             /*
                 Add the form data we need to submit
             */
-            formData.append('file', this.file);
-        /*
-          Make the request to the POST /single-file URL
-        */
-          await this.$axios.post( 'http://localhost:3000/api/messages',
-                formData,
-                {
-                headers: {
+      formData.append('idUSERS', this.$auth.user[0].idUSERS),
+      formData.append('title',this.message.title),
+      formData.append('content',this.message.content),
+      formData.append('attachment', this.attachment); 
+      formData.append('created_at',new Date),
+      formData.append('message_parent', null)
+      formData.append('username', this.$auth.user[0].username),
+
+     await this.$axios.$post( 'http://localhost:3000/api/messages', 
+          formData,
+          {
+          headers: {
                     'Content-Type': 'multipart/form-data'
                 }
-              }
-            ).then(function(){
-          console.log('SUCCESS!!');
-        })
-        .catch(function(){
-          console.log('FAILURE!!');
-        });
-      },
-      /*
-        Handles a change on the file upload
-      */
-      handleFileUpload(){
-        this.file = this.$refs.file.files[0];
-      },
-    async submitForm(){
-     await this.$axios.$post( 'http://localhost:3000/api/messages', {
-          message: this.message,
-        })
+          })
         .then((response) => {
           console.log(response)
           if(response.data._id){
@@ -113,7 +98,10 @@ export default {
             this.errors = error.response.data.errors
           }
         });
-    }
+    },
+    handleFileUpload(){
+        this.attachment = this.$refs.attachment.files[0];
+      }
   }
 }  
 </script>

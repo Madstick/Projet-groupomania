@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 const config = require('../config/authconfig')
 
 exports.createMessage = (req, res, next) => {
-  const message = req.body
+  const message = req.body.message
   conn.query('INSERT INTO messages SET ?', message, function (
     error,
     results,

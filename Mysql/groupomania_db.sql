@@ -54,7 +54,7 @@ CREATE TABLE `messages` (
   `idUSERS` int NOT NULL,
   `title` varchar(50) NOT NULL,
   `content` text NOT NULL,
-  `attachment` varchar(120) DEFAULT NULL,
+  `attachment` varchar(1080) DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `message_parent` int DEFAULT NULL,
   `username` varchar(50) NOT NULL,
