@@ -2,7 +2,7 @@ const conn = require('../sqlConfig')
 const jwt = require('jsonwebtoken')
 const config = require('../config/authconfig')
 
-exports.createMessage = (req, res, next) => {
+try { exports.createMessage = (req, res, next) => {
   const message = req.body.message
   conn.query('INSERT INTO messages SET ?', message, function (
     error,
@@ -14,6 +14,12 @@ exports.createMessage = (req, res, next) => {
     }
     return res.status(201).json({ message: 'Votre message a bien été posté !' })
   })
+  
+}
+
+}
+catch (error){
+  console.log(error)
 }
 
 exports.replyMessage = (req, res, next) => {

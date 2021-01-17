@@ -29,6 +29,9 @@
               {{ errors.attachment.msg }}
             </div>
           </div>
+          <div id="preview">
+            <img v-if="url" :src="url" />
+          </div>
 
           <div>
             <label for="">Votre message</label>
@@ -58,11 +61,12 @@ export default {
       idUSERS: this.$auth.user[0].idUSERS,
       title:null,
       content:null,
-      attachment:null,
+      attachment:'',
       created_at:null,
       username: this.$auth.user[0].username,
       },
-    errors:null
+    errors:null,
+    url: null,
     }
   },
   methods:{
@@ -99,8 +103,10 @@ export default {
           }
         });
     },
-    handleFileUpload(){
+    handleFileUpload(e){
         this.attachment = this.$refs.attachment.files[0];
+        const file = e.target.files[0];
+        this.url = URL.createObjectURL(file);
       }
   }
 }  
