@@ -10,7 +10,7 @@
           @submit.prevent="submitForm()">
 
           <div class="form-group">
-            <label for="">Title</label>
+            <label for="">Titre</label>
             <input type="text" class="form-control"
               :class="{ 'is-invalid': errors && errors.title }"
               v-model="title">
@@ -19,18 +19,22 @@
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="">attachment</label>
-            <input type="text" class="form-control"
-              :class="{ 'is-invalid': errors && errors.attachment }"
-              v-model="attachment">
+            <div>
+            <label for="">Pièces jointes</label>
+            <input type="file" ref="attachment" name="attachment"
+                   :class="{ 'is-invalid': errors && errors.attachment }"
+                   @change='handleFileUpload'
+                   accept="image/jpeg,image/jpg,image/png">
             <div class="invalid-feedback" v-if="errors && errors.attachment">
               {{ errors.attachment.msg }}
             </div>
           </div>
+          <div v-if="url" id="preview">
+            <img :src="url"/>
+          </div>
 
           <div class="form-group">
-            <label for="">content</label>
+            <label for="">Votre message</label>
             <textarea cols="30" rows="4" class="form-control"
               :class="{ 'is-invalid': errors && errors.content }"
               v-model="content"></textarea>

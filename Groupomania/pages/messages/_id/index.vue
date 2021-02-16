@@ -28,7 +28,7 @@
 export default {
   middleware: 'auth',
   async asyncData(context){
-    const {data} = await context.$axios.get('http://localhost:3000/api/messages/' + context.route.params.id)
+    const {data} = await context.$axios.get('http://localhost:3000/api/messages/:id' + context.route.params.id)
     return {
       message : data
     }

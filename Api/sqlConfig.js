@@ -16,3 +16,4 @@ conn.connect(function (err) {
 })
 
 module.exports = conn
+// TODO La sql query n'est pas gerée
