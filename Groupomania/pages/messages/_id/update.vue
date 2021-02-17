@@ -1,30 +1,25 @@
 <template>
   <div>
-    <h1>Update message</h1>
+    <h1>Poster un message</h1>
     <hr>
-
-    <div class="row">
-      <div class="col-md-6">
-        <form action=""
-          method="post"
-          @submit.prevent="submitForm()">
-
-          <div class="form-group">
+    <div>
+      <div>
+        <form method="post" @submit.prevent="submitForm">
+          <div>
             <label for="">Titre</label>
-            <input type="text" class="form-control"
-              :class="{ 'is-invalid': errors && errors.title }"
-              v-model="title">
+            <input type="text" class="form-control" name="title"
+                   :class="{ 'is-invalid': errors && errors.title }"
+                   v-model="message.title" required>
             <div class="invalid-feedback" v-if="errors && errors.title">
               {{ errors.title.msg }}
             </div>
           </div>
-
-            <div>
+          <div>
             <label for="">Pièces jointes</label>
             <input type="file" ref="attachment" name="attachment"
                    :class="{ 'is-invalid': errors && errors.attachment }"
                    @change='handleFileUpload'
-                   accept="image/jpeg,image/jpg,image/png">
+                   accept="image/jpeg,image/jpg,image/png,image/gif">
             <div class="invalid-feedback" v-if="errors && errors.attachment">
               {{ errors.attachment.msg }}
             </div>
@@ -32,20 +27,17 @@
           <div v-if="url" id="preview">
             <img :src="url"/>
           </div>
-
-          <div class="form-group">
+          <div>
             <label for="">Votre message</label>
-            <textarea cols="30" rows="4" class="form-control"
+            <textarea required name="content"
               :class="{ 'is-invalid': errors && errors.content }"
-              v-model="content"></textarea>
+              v-model="message.content"></textarea>
             <div class="invalid-feedback" v-if="errors && errors.content">
               {{ errors.content.msg }}
             </div>
           </div>
-
-          <input type="submit" value="Submit" class="btn btn-primary mr-3">
-          <nuxt-link :to="'/messages/' + $route.params.id" class="btn btn-secondary mr-3">Cancel</nuxt-link>
-
+          <button type="submit">Envoyer</button>
+          <nuxt-link :to="'/messages/' + this.$route.params.id">Cancel</nuxt-link>
         </form>
       </div>
     </div>
@@ -55,48 +47,75 @@
 <script>
 export default {
   middleware: 'auth',
-  async asyncData(context){
-    const {data} = await context.$axios.get('http://localhost:3000/api/messages/' + context.route.params.id)
+  data() {
     return {
-      message : data
+      message: {
+        idUSERS: this.$auth.user[0].idUSERS,
+        title: null,
+        content: null,
+        attachment: '',
+        username: this.$auth.user[0].username,
+      },
+      errors: null,
+      url: null,
     }
   },
-  data(){
-    return{
-      errors:null,
-      title:null,
-      attachment:null,
-      content:null
-    }
-  },
-  mounted(){
-    this.fillFormData()
+ mounted(){
+    this.asyncData()
   },
   methods:{
-    fillFormData(){
-      this.title = this.message.title
-      this.attachment = this.message.attachment
-      this.content = this.message.content
+    async asyncData(){
+    await this.$axios.get('http://localhost:3000/api/messages/' + this.$route.params.id) 
+    .then((response) => {
+      if (response.data.results.length === 0){
+        this.$router.push({ name:'messages' })
+      }
+        console.log(response)
+        this.message = response.data.results[0]       
+        })
+        .catch((error) => {
+          console.log(error)
+          if (error.response.message.errors) {
+            this.errors = error.response.message.errors
+          }
+        })
     },
-    submitForm(){
-      this.$axios.put( 'http://localhost:3000/api/messages/modifyMessage' + this.$route.params.id , {
-          title: this.title,
-          attachment: this.attachment,
-          content: this.content,
+    async submitForm() {
+      const formData = new FormData()
+
+      formData.append('idUSERS', this.$auth.user[0].idUSERS)
+      formData.append('title', this.message.title)
+      formData.append('content', this.message.content)
+      formData.append('attachment', this.attachment,)
+      formData.append('message_parent', null)
+      formData.append('username', this.$auth.user[0].username)
+
+      await this.$axios
+        .$put('http://localhost:3000/api/messages', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
         })
         .then((response) => {
           console.log(response)
-          if(response.data._id){
-            this.$router.push({ name:'idMESSAGE', params:{ updated:'yes', id: this.$route.params.id } })
+          if (response.id) {
+            this.$router.push('/messages/'+response.id)
           }
         })
-        .catch( (error) => {
+        .catch((error) => {
           console.log(error)
-          if(error.response.data.errors){
-            this.errors = error.response.data.errors
+          if (error.response.message.errors) {
+            this.errors = error.response.message.errors
           }
-        });
-    }
-  }
+        })
+    },
+    handleFileUpload(e) {
+      this.attachment = this.$refs.attachment.files[0];
+      const file = e.target.files[0];
+      this.url = URL.createObjectURL(file);
+    },
+  },
 }
 </script>
+
+<style scoped></style>

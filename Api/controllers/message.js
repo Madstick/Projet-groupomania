@@ -1,13 +1,12 @@
 const conn = require('../sqlConfig')
 const jwt = require('jsonwebtoken')
 const config = require('../config/authconfig')
+const fs = require('fs')
 
 try {
     exports.createMessage = (req, res, next) => {
         // TODO req.body.message n'existe pas en l'état.
         // const message = req.body.message;
-        console.log(req.body);
-        console.log(req.file.filename);
         // req.body = [
         //     idUSERS: '2',
         //     title: 'title',
@@ -42,8 +41,10 @@ try {
 
                 return res.status(400).json(error)
             }
+            // console.log(results)
             return res.status(201).json({
-                message: 'Votre message a bien été posté !'
+                message: 'Votre message a bien été posté !',
+                id:results.insertId
             })
         })
 
@@ -54,8 +55,13 @@ try {
 }
 
 exports.getMessage = (req, res, next) => {
-    const message = req.body
-    conn.query('SELECT * FROM messages WHERE idMESSAGES=?', message, function (
+    const idMessage = req.params.id
+    const token = req.headers.authorization.split(' ')[1]
+    const decodedToken = jwt.verify(token, config.token)
+    const userId = decodedToken.userId
+    // console.log(req.params.id)
+    conn.query("SELECT messages.*, COUNT(likes.idUSERS) AS 'likes', COUNT(myLikes.idUSERS) AS 'myLikes', DATE_FORMAT(created_at,\"%d/%m/%Y %H:%i:%s\") AS created_at_formated FROM messages LEFT JOIN likes ON messages.idMESSAGES = likes.idMESSAGES LEFT JOIN likes myLikes ON messages.idMESSAGES = myLikes.idMESSAGES AND myLikes.idUSERS= ? WHERE messages.idMESSAGES= ? GROUP BY messages.idMESSAGES ORDER BY created_at DESC", 
+        [userId,idMessage], function (
         error,
         results,
         fields
@@ -63,7 +69,11 @@ exports.getMessage = (req, res, next) => {
         if (error) {
             return res.status(400).json(error)
         }
-        return res.status(201).json({message: 'Le message a bien été vu'})
+        // console.log(results)
+        return res.status(201).json({
+            message: 'Le message a bien été vu',
+            results
+        })
     })
 }
 
@@ -98,6 +108,10 @@ exports.getAllMessages = (req, res, next) => {
 }
 
 exports.modifyMessage = (req, res, next) => {
+    const token = req.headers.authorization.split(' ')[1]
+    const decodedToken = jwt.verify(token, config.token)
+    const userId = decodedToken.userId
+    const role = decodedToken.role
     conn.query(
         'SELECT * FROM messages WHERE idMESSAGES=?',
         req.params.id,
@@ -105,14 +119,12 @@ exports.modifyMessage = (req, res, next) => {
             if (error) {
                 return res.status(400).json(error)
             }
-            const token = req.headers.authorization.split(' ')[1]
-            const decodedToken = jwt.verify(token, config.token)
-            const userId = decodedToken.userId
-            const role = decodedToken.role
             const messageId = results[0].idUSERS
             if (userId !== messageId && role !== 'admin') {
                 return res.status(401).json({message: 'Accès non autorisé'})
             }
+            const filename = results[0].attachment
+            fs.unlinkSync(`images/${filename}`)
             const updatedMessage = req.body
             conn.query(
                 'UPDATE messages SET ? WHERE idMESSAGES=?',
@@ -131,6 +143,10 @@ exports.modifyMessage = (req, res, next) => {
 }
 
 exports.deleteMessage = (req, res, next) => {
+    const token = req.headers.authorization.split(' ')[1]
+    const decodedToken = jwt.verify(token, config.token)
+    const userId = decodedToken.userId
+    const role = decodedToken.role
     conn.query(
         'SELECT * FROM messages WHERE idMESSAGES=?',
         req.params.id,
@@ -138,21 +154,19 @@ exports.deleteMessage = (req, res, next) => {
             if (error) {
                 return res.status(400).json(error)
             }
-            const token = req.headers.authorization.split(' ')[1]
-            const decodedToken = jwt.verify(token, config.token)
-            const userId = decodedToken.userId
-            const role = decodedToken.role
-            const messageId = results[0].idUSERS
-            if (userId !== messageId && role !== 'admin') {
+            const messageIdUser = results[0].idUSERS
+            if (userId !== messageIdUser && role !== 'admin') {
                 return res.status(401).json({message: 'Accès non autorisé'})
             }
+            const filename = results[0].attachment
+            fs.unlinkSync(`images/${filename}`)
             conn.query(
                 `DELETE FROM messages WHERE idMESSAGES=${req.params.id}`,
                 req.params.id,
                 function (error, results, fields) {
                     if (error) {
                         return res.status(400).json(error)
-                    }
+                    }         
                     return res
                         .status(200)
                         .json({message: 'Votre message a bien été supprimé !'})

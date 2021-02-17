@@ -79,9 +79,8 @@ export default {
         })
         .then((response) => {
           console.log(response)
-          // TODO Gérer la réponse : response.message
-          if (response.message._id) {
-            this.$router.push('/messages/:id?')
+          if (response.id) {
+            this.$router.push('/messages/'+response.id)
           }
         })
         .catch((error) => {

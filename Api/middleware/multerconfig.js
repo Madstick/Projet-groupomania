@@ -12,13 +12,19 @@ const storage = multer.diskStorage({
     callback(null, 'images')
   },
   filename: (req, file, callback) => { // On va renommer le fichier
+    console.log(file)
     const name = file.originalname.split(' ').join('_'); // On élimine les espaces du nom d'origine, remplacés par "_"
-    file.originalname.replace(/\.[^/.]+$/, "")
-    const extension = MIME_TYPES[file.mimetype]
-    // callback(null, Date.now() + name)
-    // name.replace(/\.[^/.]+$/, "")
-    callback(null, name + Date.now() + '.' + extension) // création du nom final
+    callback(null, Date.now() + name ) // création du nom final
+
   },
+  fileFilter: (req, file, cb) => {
+    const extension = MIME_TYPES[file.mimetype];
+    console.log(extension)
+    if (!extension) {
+      return new Error('Seul des fichiers images sont autorisés')
+    }
+    cb(null, true);
+  }
 })
 
 // TODO Faire gaffe au "name" des champs fichiers

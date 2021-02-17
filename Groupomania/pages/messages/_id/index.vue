@@ -16,7 +16,7 @@
     <hr>
     <div>
       <div>
-        <nuxt-link :to="'messages/' + message._id + '/update'">Modifier</nuxt-link>
+        <nuxt-link :to="'/messages/' + message.idMESSAGES + '/update'">Modifier</nuxt-link>
         <button @click="deleteRecord()">Supprimer</button>
       </div>
       <nuxt-link to="/messages">Back to messages</nuxt-link>
@@ -27,20 +27,47 @@
 <script>
 export default {
   middleware: 'auth',
-  async asyncData(context){
-    const {data} = await context.$axios.get('http://localhost:3000/api/messages/:id' + context.route.params.id)
+    data() {
     return {
-      message : data
+      message: {
+        idUSERS: this.$auth.user[0].idUSERS,
+        title: '',
+        content: '',
+        attachment: '',
+        username: this.$auth.user[0].username,
+        created_at_formated: '',
+        likes:0,
+      },
+      errors: null,
+      url: null,
     }
   },
+  mounted(){
+    this.asyncData()
+  },
   methods:{
+    async asyncData(){
+    await this.$axios.get('http://localhost:3000/api/messages/' + this.$route.params.id) 
+    .then((response) => {
+      if (response.data.results.length === 0){
+        this.$router.push({ name:'messages' })
+      }
+        console.log(response)
+        this.message = response.data.results[0]       
+        })
+        .catch((error) => {
+          console.log(error)
+          if (error.response.message.errors) {
+            this.errors = error.response.message.errors
+          }
+        })
+    },
+
     deleteRecord(){
       if(confirm("Are you sure?") === true){
         this.$axios.delete('http://localhost:3000/api/messages/' + this.$route.params.id)
           .then((response) => {
-            if(response.data._id){
-              this.$router.push({ name:'messages', params:{ deleted:'yes' } })
-            }
+              this.$router.push({ name:'messages', params:{ deleted:'yes' } })           
           })
           .catch( (error) => {
             console.log(error);
