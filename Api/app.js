@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json()); 
 
-app.use(express.static(path.join(__dirname, 'images')))
+app.use('/images',express.static('images'))
 
 app.use('/api/messages', messageRoutes)
 app.use('/api/auth', userRoutes)

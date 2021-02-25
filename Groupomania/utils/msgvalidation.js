@@ -13,7 +13,7 @@ let maxLength = (propertyType, maxLength) => {
     return v => v && v.length <= maxLength || `${propertyType} doit être moins de ${maxLength} charactères`
   } 
   
-let msgFormat = () => {
+let imgFormat = () => {
 let regex = /\.(gif|jpe?g|png)$/i 
 return v => v && regex.test(v) || "Doit être un format valide(jpg,jpeg,png ou gif)"
 }
@@ -23,5 +23,5 @@ export default {
     required,
     minLength,
     maxLength,
-    msgFormat
+    imgFormat
   }

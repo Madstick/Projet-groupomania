@@ -5,32 +5,20 @@ const fs = require('fs')
 
 try {
     exports.createMessage = (req, res, next) => {
-        // TODO req.body.message n'existe pas en l'état.
-        // const message = req.body.message;
-        // req.body = [
-        //     idUSERS: '2',
-        //     title: 'title',
-        //     content: 'content',
-        //     attachment: 'filename ?',
-        //     message_parent: 'null',
-        //     username: 'histe'
-        //]
-        // Du coup la clé message n'existe pas.
-        // Soit tu transforme ton formData côté view, soit tu gère la concaténation des champs ici.
-
         let message = {
             idUSERS: parseInt(req.body.idUSERS),
             title: req.body.title,
             content: req.body.content,
-            attachment: req.file.filename,
+            attachment: req.file 
+                ? req.file.filename
+                :null,
             created_at: new Date(),
             message_parent:
-                req.body.message_parent !== 'null'
+                req.body.message_parent !== null
                     ? parseInt(req.body.message_parent)
                     : null,
             username: req.body.username,
         }
-
         conn.query('INSERT INTO messages SET ?', message, function (
             error,
             results,
@@ -38,7 +26,6 @@ try {
         ) {
             if (error) {
                 console.log(error);
-
                 return res.status(400).json(error)
             }
             // console.log(results)
@@ -47,7 +34,6 @@ try {
                 id:results.insertId
             })
         })
-
     }
 
 } catch (error) {
@@ -77,9 +63,10 @@ exports.getMessage = (req, res, next) => {
     })
 }
 
-exports.replyMessage = (req, res, next) => {
-    const message = req.body
-    conn.query('INSERT INTO messages SET ?', message, function (
+exports.getComment = (req, res, next) => {
+    const idMessage = req.params.id
+    conn.query("SELECT messages.*, DATE_FORMAT(created_at,\"%d/%m/%Y %H:%i:%s\") AS created_at_formated FROM messages WHERE messages.message_parent= ? ORDER BY created_at DESC", 
+        [idMessage], function (
         error,
         results,
         fields
@@ -87,7 +74,10 @@ exports.replyMessage = (req, res, next) => {
         if (error) {
             return res.status(400).json(error)
         }
-        return res.status(201).json({message: 'Votre réponse a bien été postée !'})
+        // console.log(results)
+        return res.status(201).json({
+            results
+        })
     })
 }
 

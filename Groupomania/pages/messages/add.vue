@@ -67,7 +67,7 @@ export default {
       formData.append('idUSERS', this.$auth.user[0].idUSERS)
       formData.append('title', this.message.title)
       formData.append('content', this.message.content)
-      formData.append('attachment', this.attachment,)
+      formData.append('attachment', this.attachment)
       formData.append('message_parent', null)
       formData.append('username', this.$auth.user[0].username)
 
@@ -80,7 +80,7 @@ export default {
         .then((response) => {
           console.log(response)
           if (response.id) {
-            this.$router.push('/messages/'+response.id)
+            this.$router.push('/messages/'+ response.id)
           }
         })
         .catch((error) => {

@@ -14,7 +14,7 @@
     <div 
       v-if="messages.length">
       <nuxt-link 
-        :to="'/messages/' + message._id"
+        :to="'/messages/' + message.id"
         v-for="message in messages"
         :key="message._id">
         {{ message.title }}
@@ -30,12 +30,42 @@
 
 <script>
 export default {
-  async asyncData(context){
-    const {data} = await context.$axios.get('http://localhost:3000/api/messages/')
+  middleware: 'auth',
+    data() {
     return {
-      messages : data
+      messages:{
+      message: {
+        idUSERS: this.$auth.user[0].idUSERS,
+        title: '',
+        content: '',
+        attachment: '',
+        username: this.$auth.user[0].username,
+        created_at_formated: '',
+        likes:0,
+      },
+      },
+      errors: null,
+      url: null,
     }
   },
+  mounted(){
+    this.asyncData()
+  },
+  methods:{
+    async asyncData(){
+    await this.$axios.get('http://localhost:3000/api/messages/') 
+    .then((response) => {
+        console.log(response)
+        this.message = response.data.results[0]       
+        })
+        .catch((error) => {
+          console.log(error)
+          if (error.response.message.errors) {
+            this.errors = error.response.message.errors
+          }
+        })
+    },
+  }
 }
 </script>
 <style scoped>

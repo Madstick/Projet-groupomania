@@ -1,16 +1,24 @@
 <template>
   <v-form v-model="valid">
-    <v-text-field v-model="msgInfo.msgname" 
+    <v-text-field v-model="msgInfo.title" 
                   label="Titre" 
                   :rules="[required('Titre')]"
     />
 
-    <v-text-field v-model="msgInfo.email" 
-                  label="Email" 
-                  :rules="[required('email'), emailFormat()]"/>
+    <v-text-area v-model="msgInfo.image" 
+                  label="Votre message" 
+                  :rules="[required('image'), imgFormat()]"/>
 
-    <v-text-field v-model="msgInfo.password"
-                  label="Contenu"
+  <v-file-input
+    :rules="[required('image'), imgFormat()]"
+    accept="image/png, image/jpeg, image/bmp"
+    placeholder="Votre image"
+    prepend-icon="mdi-camera"
+    label="Votre image"
+  ></v-file-input>
+
+    <v-text-field v-model="msgInfo.content"
+                  label="Votre message"
                   :rules="[required('contenu'), minLength('contenu', 8)]"
                   />            
 
@@ -24,17 +32,15 @@
     data() {
       return {
         valid: false,
-        showPassword: false,
-        hasName: false,
         msgInfo: {
           title:'',
-          email: '',
-          password: ''
+          image: '',
+          content: ''
         },
         ...validations
       }
     },
-    props: ["submitForm", "buttonText", "hasName"]
+    props: ["submitForm", "buttonText"]
   }
 </script>
 
