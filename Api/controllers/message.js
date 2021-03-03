@@ -14,9 +14,9 @@ try {
                 :null,
             created_at: new Date(),
             message_parent:
-                req.body.message_parent !== null
+                req.body.message_parent !== null && req.body.message_parent !== 'null'
                     ? parseInt(req.body.message_parent)
-                    : null,
+                    :null,
             username: req.body.username,
         }
         conn.query('INSERT INTO messages SET ?', message, function (
@@ -46,7 +46,7 @@ exports.getMessage = (req, res, next) => {
     const decodedToken = jwt.verify(token, config.token)
     const userId = decodedToken.userId
     // console.log(req.params.id)
-    conn.query("SELECT messages.*, COUNT(likes.idUSERS) AS 'likes', COUNT(myLikes.idUSERS) AS 'myLikes', DATE_FORMAT(created_at,\"%d/%m/%Y %H:%i:%s\") AS created_at_formated FROM messages LEFT JOIN likes ON messages.idMESSAGES = likes.idMESSAGES LEFT JOIN likes myLikes ON messages.idMESSAGES = myLikes.idMESSAGES AND myLikes.idUSERS= ? WHERE messages.idMESSAGES= ? GROUP BY messages.idMESSAGES ORDER BY created_at DESC", 
+    conn.query("SELECT messages.*, COUNT(likes.idUSERS) AS 'likes', COUNT(myLikes.idUSERS) AS 'myLikes' FROM messages LEFT JOIN likes ON messages.idMESSAGES = likes.idMESSAGES LEFT JOIN likes myLikes ON messages.idMESSAGES = myLikes.idMESSAGES AND myLikes.idUSERS= ? WHERE messages.idMESSAGES= ? GROUP BY messages.idMESSAGES ORDER BY created_at DESC", 
         [userId,idMessage], function (
         error,
         results,
@@ -65,7 +65,7 @@ exports.getMessage = (req, res, next) => {
 
 exports.getComment = (req, res, next) => {
     const idMessage = req.params.id
-    conn.query("SELECT messages.*, DATE_FORMAT(created_at,\"%d/%m/%Y %H:%i:%s\") AS created_at_formated FROM messages WHERE messages.message_parent= ? ORDER BY created_at DESC", 
+    conn.query("SELECT messages.* FROM messages WHERE messages.message_parent= ? ORDER BY created_at DESC", 
         [idMessage], function (
         error,
         results,
@@ -86,7 +86,7 @@ exports.getAllMessages = (req, res, next) => {
     const decodedToken = jwt.verify(token, config.token)
     const userId = decodedToken.userId
     conn.query(
-        "SELECT messages.*, COUNT(likes.idUSERS) AS 'likes', COUNT(myLikes.idUSERS) AS 'myLikes', DATE_FORMAT(created_at,\"%d/%m/%Y %H:%i:%s\") AS created_at_formated FROM messages LEFT JOIN likes ON messages.idMESSAGES = likes.idMESSAGES LEFT JOIN likes myLikes ON messages.idMESSAGES = myLikes.idMESSAGES AND myLikes.idUSERS= ? GROUP BY messages.idMESSAGES ORDER BY created_at DESC",
+        "SELECT messages.*, COUNT(likes.idUSERS) AS 'likes', COUNT(myLikes.idUSERS) AS 'myLikes' FROM messages LEFT JOIN likes ON messages.idMESSAGES = likes.idMESSAGES LEFT JOIN likes myLikes ON messages.idMESSAGES = myLikes.idMESSAGES AND myLikes.idUSERS= ? WHERE message_parent IS NULL GROUP BY messages.idMESSAGES ORDER BY created_at DESC",
         [userId],
         function (error, results, fields) {
             if (error) {
@@ -149,7 +149,9 @@ exports.deleteMessage = (req, res, next) => {
                 return res.status(401).json({message: 'Accès non autorisé'})
             }
             const filename = results[0].attachment
-            fs.unlinkSync(`images/${filename}`)
+            if(filename){
+                fs.unlinkSync(`images/${filename}`)
+            } 
             conn.query(
                 `DELETE FROM messages WHERE idMESSAGES=${req.params.id}`,
                 req.params.id,
@@ -167,8 +169,10 @@ exports.deleteMessage = (req, res, next) => {
 }
 
 exports.addLike = (req, res, next) => {
-    const like = req.body
-    conn.query('INSERT INTO likes SET ?', like, function (
+    const token = req.headers.authorization.split(' ')[1]
+    const decodedToken = jwt.verify(token, config.token)
+    const userId = decodedToken.userId
+    conn.query('INSERT INTO likes VALUES (?,?) ', [userId,req.params.id], function (
         error,
         results,
         fields
@@ -185,7 +189,7 @@ exports.removeLike = (req, res, next) => {
     const decodedToken = jwt.verify(token, config.token)
     const userId = decodedToken.userId
     conn.query(
-        `DELETE FROM likes WHERE idMESSAGES=${req.params.id} && idUSERS=${userId}`,
+        `DELETE FROM likes WHERE idMESSAGES=${req.params.id} AND idUSERS=${userId}`,
         function (error, results, fields) {
             if (error) {
                 return res.status(400).json(error)

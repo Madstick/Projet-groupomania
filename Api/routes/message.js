@@ -11,7 +11,7 @@ router.get('/:id', auth, messageCtrl.getMessage)
 router.get('/comments/:id', auth, messageCtrl.getComment)
 router.put('/:id', auth, multer, messageCtrl.modifyMessage)
 router.delete('/:id', auth, messageCtrl.deleteMessage)
-router.post('/:id/like', auth, messageCtrl.addLike)
-router.delete('/:id/like', auth, messageCtrl.removeLike)
+router.post('/like/:id', auth, messageCtrl.addLike)
+router.delete('/like/:id', auth, messageCtrl.removeLike)
 
 module.exports = router

@@ -29,7 +29,7 @@
       return {
         valid: false,
         showPassword: false,
-        hasName: false,
+        // hasName: false,
         userInfo: {
           username:'',
           email: '',

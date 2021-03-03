@@ -4,7 +4,7 @@
     <hr>
     <div>
       <div>
-        <form method="post" @submit.prevent="submitForm">
+        <!-- <form method="post" @submit.prevent="submitForm">
           <div>
             <label for="">Titre</label>
             <input type="text" class="form-control" name="title"
@@ -15,11 +15,11 @@
             </div>
           </div>
           <div>
-            <label for="">Pièces jointes</label>
-            <input type="file" ref="attachment" name="attachment"
+            <v-file-input v-model="message.attachment" name="attachment" label="Votre image"
                    :class="{ 'is-invalid': errors && errors.attachment }"
                    @change='handleFileUpload'
-                   accept="image/jpeg,image/jpg,image/png,image/gif">
+                   accept="image/*">
+            </v-file-input>       
             <div class="invalid-feedback" v-if="errors && errors.attachment">
               {{ errors.attachment.msg }}
             </div>
@@ -38,38 +38,45 @@
           </div>
           <button type="submit">Envoyer</button>
           <nuxt-link to="/messages">Cancel</nuxt-link>
-        </form>
+        </form> -->
+        <MsgForm buttonText="Envoyer" :submitForm="submitForm"/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import MsgForm from '@/components/MsgForm'
 export default {
   middleware: 'auth',
+  components:{
+    MsgForm
+  },
   data() {
     return {
-      message: {
-        idUSERS: this.$auth.user[0].idUSERS,
-        title: null,
-        content: null,
-        attachment: '',
-        username: this.$auth.user[0].username,
-      },
-      errors: null,
-      url: null,
+      // message: {
+      //   idUSERS: this.$auth.user[0].idUSERS,
+      //   title: null,
+      //   content: null,
+      //   attachment: null,
+      //   username: this.$auth.user[0].username,
+      // },
+      // errors: null,
+      // url: null,
     }
   },
   methods: {
-    async submitForm() {
+    async submitForm(msgInfo) {
       const formData = new FormData()
 
       formData.append('idUSERS', this.$auth.user[0].idUSERS)
-      formData.append('title', this.message.title)
-      formData.append('content', this.message.content)
-      formData.append('attachment', this.attachment)
+      formData.append('title', msgInfo.title)
+      formData.append('content', msgInfo.content)
       formData.append('message_parent', null)
       formData.append('username', this.$auth.user[0].username)
+      if (msgInfo.attachment){
+        formData.append('attachment', msgInfo.attachment)
+      }
 
       await this.$axios
         .$post('http://localhost:3000/api/messages', formData, {
@@ -90,11 +97,9 @@ export default {
           }
         })
     },
-    handleFileUpload(e) {
-      this.attachment = this.$refs.attachment.files[0];
-      const file = e.target.files[0];
-      this.url = URL.createObjectURL(file);
-    },
+    // handleFileUpload(e) {
+    //   this.url = URL.createObjectURL(msgInfo.attachment);
+    // },
   },
 }
 </script>

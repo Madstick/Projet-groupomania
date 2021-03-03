@@ -1,46 +1,61 @@
 <template>
   <v-form v-model="valid">
-    <v-text-field v-model="msgInfo.title" 
+    <v-text-field v-model="message.title" 
                   label="Titre" 
-                  :rules="[required('Titre')]"
+                  :rules="[required('Titre'), minLength('contenu', 2)]"
     />
 
-    <v-text-area v-model="msgInfo.image" 
-                  label="Votre message" 
-                  :rules="[required('image'), imgFormat()]"/>
-
   <v-file-input
-    :rules="[required('image'), imgFormat()]"
-    accept="image/png, image/jpeg, image/bmp"
+    v-model="message.attachment"
+    :rules="[imgFormat()]"
+    accept="image/png, image/jpeg, image/gif"
     placeholder="Votre image"
     prepend-icon="mdi-camera"
     label="Votre image"
+    @change='handleFileUpload()'
   ></v-file-input>
 
-    <v-text-field v-model="msgInfo.content"
+  <div v-if="url" id="preview">
+            <img :src="url"/>
+  </div>
+
+    <v-textarea v-model="message.content"
                   label="Votre message"
                   :rules="[required('contenu'), minLength('contenu', 8)]"
                   />            
 
-    <v-btn @click="submitForm(msgInfo)" :disabled="!valid">{{ buttonText }}</v-btn>
+    <v-btn @click="submitForm(message)" :disabled="!valid">{{ buttonText }}</v-btn>
   </v-form>
 </template>
 
 <script>
-  import validations from "@/utils/msgvalidations";
+  import validations from "@/utils/msgvalidation";
   export default {
     data() {
       return {
         valid: false,
-        msgInfo: {
-          title:'',
-          image: '',
-          content: ''
+        message: {
+          idUSERS: this.$auth.user[0].idUSERS,
+          title: null,
+          content: null,
+          attachment: null,
+          username: this.$auth.user[0].username,
         },
+        url:null,
         ...validations
       }
     },
-    props: ["submitForm", "buttonText"]
+    props: ["submitForm", "buttonText"],
+    methods: {
+      handleFileUpload() {
+        if (this.message.attachment){
+          this.url = URL.createObjectURL(this.message.attachment);
+        }
+        else{
+          this.url = null
+        }
+      },
+    },
   }
 </script>
 

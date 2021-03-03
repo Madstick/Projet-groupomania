@@ -8,10 +8,13 @@
 
     <p>Crée par {{ message.username }}</p>
 
-    <img :src="message.attachment">
+    <img v-if="message.hasAttachment" :src="message.attachment">
 
     <p>{{ message.content }}</p>
 
+<v-btn @click='toggleLike'>
+
+</v-btn>
 
     <div>
       <div>
@@ -38,6 +41,7 @@
 <div v-if='comments.length>0'>
   <div v-for='message in comments' :key='message.idMESSAGES'>
     {{message}}
+    <p>Crée par {{message.username}}</p> 
   </div>
 </div>
 
@@ -62,6 +66,7 @@ export default {
         title: '',
         content: '',
         attachment: '',
+        hasAttachment:false,
         username: this.$auth.user[0].username,
         created_at_formated: '',
         message_parent:null,
@@ -84,7 +89,10 @@ export default {
         this.$router.push({ name:'messages' })
       }
         console.log(response)
-        this.message = response.data.results[0];  
+        this.message = response.data.results[0];
+        if(this.message.attachment){
+          this.message.hasAttachment=true;
+        }  
         this.message.attachment = 'http://localhost:3000/images/'+ this.message.attachment;
         this.isLoading=false     
         })
