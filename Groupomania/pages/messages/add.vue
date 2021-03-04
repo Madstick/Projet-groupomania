@@ -4,41 +4,6 @@
     <hr>
     <div>
       <div>
-        <!-- <form method="post" @submit.prevent="submitForm">
-          <div>
-            <label for="">Titre</label>
-            <input type="text" class="form-control" name="title"
-                   :class="{ 'is-invalid': errors && errors.title }"
-                   v-model="message.title" required>
-            <div class="invalid-feedback" v-if="errors && errors.title">
-              {{ errors.title.msg }}
-            </div>
-          </div>
-          <div>
-            <v-file-input v-model="message.attachment" name="attachment" label="Votre image"
-                   :class="{ 'is-invalid': errors && errors.attachment }"
-                   @change='handleFileUpload'
-                   accept="image/*">
-            </v-file-input>       
-            <div class="invalid-feedback" v-if="errors && errors.attachment">
-              {{ errors.attachment.msg }}
-            </div>
-          </div>
-          <div v-if="url" id="preview">
-            <img :src="url"/>
-          </div>
-          <div>
-            <label for="">Votre message</label>
-            <textarea required name="content"
-              :class="{ 'is-invalid': errors && errors.content }"
-              v-model="message.content"></textarea>
-            <div class="invalid-feedback" v-if="errors && errors.content">
-              {{ errors.content.msg }}
-            </div>
-          </div>
-          <button type="submit">Envoyer</button>
-          <nuxt-link to="/messages">Cancel</nuxt-link>
-        </form> -->
         <MsgForm buttonText="Envoyer" :submitForm="submitForm"/>
       </div>
     </div>
@@ -54,15 +19,6 @@ export default {
   },
   data() {
     return {
-      // message: {
-      //   idUSERS: this.$auth.user[0].idUSERS,
-      //   title: null,
-      //   content: null,
-      //   attachment: null,
-      //   username: this.$auth.user[0].username,
-      // },
-      // errors: null,
-      // url: null,
     }
   },
   methods: {
@@ -97,9 +53,6 @@ export default {
           }
         })
     },
-    // handleFileUpload(e) {
-    //   this.url = URL.createObjectURL(msgInfo.attachment);
-    // },
   },
 }
 </script>

@@ -2,7 +2,7 @@
   <v-form v-model="valid">
     <v-text-field v-model="userInfo.username" 
                   label="Nom d'utilisateur" 
-                  :rules="[required('nom utilisateur')]"
+                  :rules="[required('nom utilisateur'), minLength('nom utilisateur', 4),maxLength('nom utilisateur', 50)]"
                   v-if="hasName" />
 
     <v-text-field v-model="userInfo.email" 
@@ -29,7 +29,6 @@
       return {
         valid: false,
         showPassword: false,
-        // hasName: false,
         userInfo: {
           username:'',
           email: '',

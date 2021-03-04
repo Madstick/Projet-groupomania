@@ -4,6 +4,7 @@
     <div>
       <h1 class="title">Votre compte</h1>
       <img src="~/assets/icon.svg" />
+      {{$auth.user}}
     </div>
   </div>
 </template>
