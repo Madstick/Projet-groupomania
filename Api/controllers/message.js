@@ -5,8 +5,11 @@ const fs = require('fs')
 
 try {
     exports.createMessage = (req, res, next) => {
+        const token = req.headers.authorization.split(' ')[1]
+        const decodedToken = jwt.verify(token, config.token)
+        const userId = decodedToken.userId
         let message = {
-            idUSERS: parseInt(req.body.idUSERS),
+            idUSERS: userId,
             title: req.body.title,
             content: req.body.content,
             attachment: req.file 
@@ -113,9 +116,21 @@ exports.modifyMessage = (req, res, next) => {
             if (userId !== messageId && role !== 'admin') {
                 return res.status(401).json({message: 'Accès non autorisé'})
             }
-            const filename = results[0].attachment
-            fs.unlinkSync(`images/${filename}`)
-            const updatedMessage = req.body
+            let updatedMessage = req.body
+            if (req.file){
+                updatedMessage.attachment = req.file 
+                ? req.file.filename
+                :null
+                const attachment = results[0].attachment
+                if(attachment) {
+                    fs.unlinkSync(`images/${attachment}`)
+                }
+            }
+            console.log(updatedMessage)
+            updatedMessage.message_parent =
+            req.body.message_parent !== null && req.body.message_parent !== 'null'
+                ? parseInt(req.body.message_parent)
+                :null  
             conn.query(
                 'UPDATE messages SET ? WHERE idMESSAGES=?',
                 [updatedMessage, req.params.id],
@@ -125,7 +140,10 @@ exports.modifyMessage = (req, res, next) => {
                     }
                     return res
                         .status(200)
-                        .json({message: 'Votre message a bien été modifié !'})
+                        .json({
+                            message: 'Votre message a bien été modifié !',
+                            id:req.params.id
+                        })
                 }
             )
         }

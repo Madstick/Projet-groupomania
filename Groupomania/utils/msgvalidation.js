@@ -12,9 +12,12 @@ let maxLength = (propertyType, maxLength) => {
     return v => v && v.length <= maxLength || `${propertyType} doit faire moins de ${maxLength} charactères`
   } 
   
-let imgFormat = () => {
-let regex = /\.(gif|jpe?g|png)$/i 
-return v => v && regex.test(v) || "Doit être un format valide ( jpg, jpeg, png ou gif )"
+let imgFormat = (attachment) => {
+let regex = /(image\/)+(gif|jpe?g|png)$/i 
+if(!attachment)
+  { return true; }
+return v => 
+  v && regex.test(v.type) || "Doit être un format valide ( jpg, jpeg, png ou gif )"
 }
 
 

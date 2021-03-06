@@ -4,7 +4,7 @@
     <hr>
     <div>
       <div>
-        <MsgForm buttonText="Envoyer" :submitForm="submitForm"/>
+        <MsgForm buttonText="Envoyer" :submitForm="submitForm" :message="message"/>
       </div>
     </div>
   </div>
@@ -17,7 +17,17 @@ export default {
   components:{
     MsgForm
 },
- mounted(){
+  data(){
+    return {
+      message: {
+        title: null,
+        content: null,
+        attachment: null,
+        username: this.$auth.user[0].username,
+      },
+    }
+  },
+  mounted(){
     this.asyncData()
   },
   methods:{
@@ -37,12 +47,11 @@ export default {
           }
         })
     },
-    async submitForm() {
+    async submitForm(msgInfo) {
       const formData = new FormData()
-
-      formData.append('idUSERS', this.$auth.user[0].idUSERS)
-      formData.append('title', this.message.title)
-      formData.append('content', this.message.content)
+      
+      formData.append('title', msgInfo.title)
+      formData.append('content', msgInfo.content)
       formData.append('message_parent', null)
       formData.append('username', this.$auth.user[0].username)
       if (msgInfo.attachment){
@@ -50,7 +59,7 @@ export default {
       }
 
       await this.$axios
-        .$put('http://localhost:3000/api/messages', formData, {
+        .$put('http://localhost:3000/api/messages/' + this.$route.params.id, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -58,7 +67,7 @@ export default {
         .then((response) => {
           console.log(response)
           if (response.id) {
-            this.$router.push('/messages/'+response.id)
+            this.$router.push('/messages/'+ this.$route.params.id )
           }
         })
         .catch((error) => {

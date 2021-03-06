@@ -1,13 +1,13 @@
 <template>
   <v-form v-model="valid">
-    <v-text-field v-model="message.title" 
+    <v-text-field v-model="formData.title" 
                   label="Titre" 
                   :rules="[required('titre'), minLength('Le titre', 2), maxLength('Le titre', 50)]"
     />
 
   <v-file-input
-    v-model="message.attachment"
-    :rules="[imgFormat()]"
+    v-model="formData.attachment"
+    :rules="[imgFormat(formData.attachment)]"
     accept="image/png, image/jpeg, image/gif"
     placeholder="Votre image"
     prepend-icon="mdi-camera"
@@ -19,45 +19,64 @@
             <img :src="url"/>
   </div>
 
-    <v-textarea v-model="message.content"
+    <v-textarea v-model="formData.content"
                   label="Votre message"
                   :rules="[required('contenu'), minLength('Le contenu', 1), maxLength('Le contenu', 8000)]"
                   />            
 
-    <v-btn @click="submitForm(message)" :disabled="!valid">{{ buttonText }}</v-btn>
+    <v-btn @click="submitForm(formData)" :disabled="!valid">{{ buttonText }}</v-btn>
     <v-btn to="/messages">Annuler</v-btn>
   </v-form>
 </template>
 
 <script>
-  import validations from "@/utils/msgvalidation";
-  export default {
+    import validations from "@/utils/msgvalidation";
+    export default {
     data() {
       return {
         valid: false,
-        message: {
-          idUSERS: this.$auth.user[0].idUSERS,
-          title: null,
-          content: null,
-          attachment: null,
-          username: this.$auth.user[0].username,
+        formData: {
+            title: null,
+            content: null,
+            attachment: null,
+            username: this.$auth.user[0].username,
         },
         url:null,
         ...validations
       }
     },
-    props: ["submitForm", "buttonText"],
+    props: {
+        submitForm: {
+            type: Function,
+            required: true
+        },
+        buttonText: {
+            type: String,
+            required: true
+        },
+        message: {
+            type: Object,
+            required: true
+        }
+    },
+    beforeMount() {
+        console.log(this.message)
+        this.formData = this.message;
+    },
     methods: {
-      handleFileUpload() {
-        if (this.message.attachment){
-          // this.attachment = this.$refs.attachment.files[0];
-          // const file = e.target.files[0];
-          this.url = URL.createObjectURL(this.message.attachment);
+        handleFileUpload() {
+            if (this.formData.attachment) {
+                this.url = URL.createObjectURL(this.formData.attachment);
+            }
+            else {
+                this.url = null
+            }
+        },
+    },
+    watch: {
+        formData(){
+            return this.message
         }
-        else{
-          this.url = null
-        }
-      },
     },
   }
 </script>

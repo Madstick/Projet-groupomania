@@ -4,7 +4,7 @@
     <hr>
     <div>
       <div>
-        <MsgForm buttonText="Envoyer" :submitForm="submitForm"/>
+        <MsgForm buttonText="Envoyer" :submitForm="submitForm" :message="message"/>
       </div>
     </div>
   </div>
@@ -17,11 +17,20 @@ export default {
   components:{
     MsgForm
   },
+  data(){
+    return {
+      message: {
+        title: null,
+        content: null,
+        attachment: null,
+        username: this.$auth.user[0].username,
+      },
+    }
+  },
   methods: {
     async submitForm(msgInfo) {
       const formData = new FormData()
 
-      formData.append('idUSERS', this.$auth.user[0].idUSERS)
       formData.append('title', msgInfo.title)
       formData.append('content', msgInfo.content)
       formData.append('message_parent', null)
