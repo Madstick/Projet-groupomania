@@ -17,10 +17,6 @@ export default {
   components:{
     MsgForm
   },
-  data() {
-    return {
-    }
-  },
   methods: {
     async submitForm(msgInfo) {
       const formData = new FormData()

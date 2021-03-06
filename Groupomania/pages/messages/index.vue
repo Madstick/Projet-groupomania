@@ -7,9 +7,9 @@
     <hr>
 
     <div 
-      v-if="$route.params.created=='yes'">Record added successfully</div>
+      v-if="$route.params.created=='yes'">Le message à bien été posté</div>
     <div 
-      v-if="$route.params.deleted=='yes'">Record deleted successfully</div>
+      v-if="$route.params.deleted=='yes'">Le message à bien été supprimé</div>
 
 
   <div>
