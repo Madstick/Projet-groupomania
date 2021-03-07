@@ -73,11 +73,6 @@
             }
         },
     },
-    watch: {
-        formData(){
-            return this.message
-        }
-    },
   }
 </script>
 

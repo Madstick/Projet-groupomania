@@ -4,7 +4,7 @@
     <hr>
     <div>
       <div>
-        <MsgForm buttonText="Envoyer" :submitForm="submitForm" :message="message"/>
+        <MsgForm buttonText="Envoyer" :submitForm="submitForm" :message="message" :key="componentkey"/>
       </div>
     </div>
   </div>
@@ -25,6 +25,7 @@ export default {
         attachment: null,
         username: this.$auth.user[0].username,
       },
+      componentkey : 0,
     }
   },
   mounted(){
@@ -38,7 +39,8 @@ export default {
         this.$router.push({ name:'messages' })
       }
         console.log(response)
-        this.message = response.data.results[0]       
+        this.message = response.data.results[0]  
+        this.componentkey++     
         })
         .catch((error) => {
           console.log(error)

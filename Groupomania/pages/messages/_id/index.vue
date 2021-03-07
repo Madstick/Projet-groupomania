@@ -101,19 +101,8 @@ export default {
           if (error.response.message.errors) {
             this.errors = error.response.message.errors
           }
-        })
-        
-    await this.$axios.get('http://localhost:3000/api/messages/comments/' + this.$route.params.id ) 
-    .then((response) => {
-          console.log(response)
-          this.comments = response.data.results
-          })
-        .catch((error) => {
-          console.log(error)
-          if (error.response.message.errors) {
-          this.errors = error.response.message.errors
-          }
-        })
+        })  
+        this.getcomments()      
     },
 
     deleteRecord(){
@@ -142,12 +131,26 @@ export default {
         })
         .then((response) => {
           console.log(response)
-            // this.$router.push('/messages/'+ idMESSAGES)   
+            this.getcomments() 
+            this.replyMessage.content = null
         })
         .catch((error) => {
           console.log(error)
           if (error.response.message.errors) {
             this.errors = error.response.message.errors
+          }
+        })
+    },
+    async getcomments(){
+      await this.$axios.get('http://localhost:3000/api/messages/comments/' + this.$route.params.id ) 
+      .then((response) => {
+          console.log(response)
+          this.comments = response.data.results
+          })
+        .catch((error) => {
+          console.log(error)
+          if (error.response.message.errors) {
+          this.errors = error.response.message.errors
           }
         })
     }
