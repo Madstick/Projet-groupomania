@@ -127,7 +127,7 @@
           justify="center"
         >
         <v-col>
-          <span class="grey--text">Items per page</span>
+          <span class="grey--text">Messages par page</span>
           <v-menu offset-y>
             <template v-slot:activator="{ on, attrs }">
               <v-btn
@@ -159,7 +159,7 @@
             class="mr-4
             grey--text"
           >
-            Page {{ page }} of {{ numberOfPages }}
+            Page {{ page }} de {{ numberOfPages }}
           </span>
           <v-btn
             fab
@@ -240,9 +240,6 @@ export default {
         })
         .catch((error) => {
           console.log(error)
-          if (error.response.message.errors) {
-            this.errors = error.response.message.errors
-          }
         })
     },
     getpostImg(item){  

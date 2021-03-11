@@ -25,7 +25,7 @@ export default {
         data: 
           registrationInfo      
       })
-      this.$store.dispatch('snackbar/setSnackbar', {text: 'Inscription réussi'})
+      // this.$store.dispatch('snackbar/setSnackbar', {text: 'Inscription réussi'})
       this.$router.push('/')
       }
       catch(error){

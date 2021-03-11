@@ -44,9 +44,6 @@ export default {
         })
         .catch((error) => {
           console.log(error)
-          if (error.response.message.errors) {
-            this.errors = error.response.message.errors
-          }
         })
     },
     async submitForm(msgInfo) {
@@ -74,9 +71,6 @@ export default {
         })
         .catch((error) => {
           console.log(error)
-          if (error.response.message.errors) {
-            this.errors = error.response.message.errors
-          }
         })
     },
   },

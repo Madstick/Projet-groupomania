@@ -3,7 +3,7 @@
       <v-app-bar app color="blue">
         <div v-if="$auth.loggedIn">
           <v-btn text to='/messages'>Accueil</v-btn>
-          <v-btn text to="/admin" v-if="$auth.user && $auth.user.isAdmin">Admin</v-btn>
+          <v-btn text to="/admin-users" v-if="$auth.user && $auth.user[0].isAdmin">Admin</v-btn>
         </div>
         <div v-else>
          <v-btn text to="/">Accueil</v-btn>
@@ -11,7 +11,7 @@
         <v-spacer />
 
       <div v-if="$auth.loggedIn">
-        <v-btn text to="/user/my-account">{{ $auth.user[0].username }}</v-btn>
+        <v-btn text to="/user/profile">{{ $auth.user[0].username }}</v-btn>
         <v-btn text @click="$auth.logout()">Se déconnecter</v-btn>
       </div>
       <div v-else>

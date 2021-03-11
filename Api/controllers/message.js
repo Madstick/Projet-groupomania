@@ -49,8 +49,8 @@ exports.getMessage = (req, res, next) => {
     const decodedToken = jwt.verify(token, config.token)
     const userId = decodedToken.userId
     // console.log(req.params.id)
-    conn.query("SELECT messages.*, COUNT(likes.idUSERS) AS 'likes', COUNT(myLikes.idUSERS) AS 'myLikes' FROM messages LEFT JOIN likes ON messages.idMESSAGES = likes.idMESSAGES LEFT JOIN likes myLikes ON messages.idMESSAGES = myLikes.idMESSAGES AND myLikes.idUSERS= ? WHERE messages.idMESSAGES= ? GROUP BY messages.idMESSAGES ORDER BY created_at DESC", 
-        [userId,idMessage], function (
+    conn.query("SELECT messages.*, COUNT(likes.idUSERS) AS 'likes', COUNT(myLikes.idUSERS) AS 'myLikes' FROM messages LEFT JOIN likes ON messages.idMESSAGES = likes.idMESSAGES LEFT JOIN likes myLikes ON messages.idMESSAGES = myLikes.idMESSAGES AND myLikes.idUSERS= ? AND myLikes.idMESSAGES= ? WHERE messages.idMESSAGES= ? GROUP BY messages.idMESSAGES ORDER BY messages.created_at DESC", 
+        [userId,idMessage,idMessage], function (
         error,
         results,
         fields

@@ -13,15 +13,17 @@
     <p>{{ message.content }}</p>
 
 <v-btn @click='toggleLike'>
-
+  <v-icon v-if="!isUserLiked">{{likeIcon}}</v-icon>
+  <v-icon v-else>{{unlikeIcon}}</v-icon>
 </v-btn>
+<p>{{message.likes}}</p>
 
     <div>
       <div>
         <nuxt-link :to="'/messages/' + message.idMESSAGES + '/update'">Modifier</nuxt-link>
         <button @click="deleteRecord()">Supprimer</button>
       </div>
-      <nuxt-link to="/messages">Back to messages</nuxt-link>
+      <nuxt-link to="/messages">Retour à l'accueil</nuxt-link>
     </div>
 
 <div>
@@ -46,17 +48,35 @@
 </div>
 
 </div>
-<v-skeleton-loader v-else 
-  :boilerplate="true" elevation="2"
-  type="table-heading,image,article,actions"
->
-</v-skeleton-loader>
-
+    <v-container style="height: 400px;" v-else>
+      <v-row
+        class="fill-height"
+        align-content="center"
+        justify="center"
+      >
+        <v-col
+          class="subtitle-1 text-center"
+          cols="12"
+        >
+          Récupération des données
+        </v-col>
+        <v-col cols="6">
+          <v-progress-linear
+            color="deep-purple accent-4"
+            indeterminate
+            rounded
+            height="6"
+          ></v-progress-linear>
+        </v-col>
+      </v-row>
+    </v-container>
 </div>
   
 </template>
 
 <script>
+import { mdiArrowUpBoldOutline } from '@mdi/js'; 
+import { mdiArrowDownBoldOutline } from '@mdi/js'; 
 export default {
   middleware: 'auth',
     data() {
@@ -76,6 +96,9 @@ export default {
       isLoading:true,
       errors: null,
       url: null,
+      likeIcon: mdiArrowUpBoldOutline,
+      unlikeIcon: mdiArrowDownBoldOutline,
+      isUserLiked: false,
     }
   },
   mounted(){
@@ -90,6 +113,9 @@ export default {
       }
         console.log(response)
         this.message = response.data.results[0];
+        if(this.message.myLikes === 1 ){
+          this.isUserLiked = true
+        }
         if(this.message.attachment){
           this.message.hasAttachment=true;
         }  
@@ -98,9 +124,6 @@ export default {
         })
         .catch((error) => {
           console.log(error)
-          if (error.response.message.errors) {
-            this.errors = error.response.message.errors
-          }
         })  
         this.getcomments()      
     },
@@ -136,23 +159,39 @@ export default {
         })
         .catch((error) => {
           console.log(error)
-          if (error.response.message.errors) {
-            this.errors = error.response.message.errors
-          }
         })
     },
     async getcomments(){
       await this.$axios.get('http://localhost:3000/api/messages/comments/' + this.$route.params.id ) 
       .then((response) => {
-          console.log(response)
           this.comments = response.data.results
           })
         .catch((error) => {
           console.log(error)
-          if (error.response.message.errors) {
-          this.errors = error.response.message.errors
-          }
         })
+    },
+    async toggleLike(){
+      this.isUserLiked = !this.isUserLiked
+      if (this.isUserLiked){
+        await this.$axios.post('http://localhost:3000/api/messages/like/' + this.$route.params.id )
+      .then((response) => {
+        console.log(response)
+        this.message.likes++
+        })
+      .catch((error) => {
+        console.log(error)
+      })
+      }
+      else {
+        await this.$axios.delete('http://localhost:3000/api/messages/like/' + this.$route.params.id )
+      .then((response) => {
+        console.log(response)
+        this.message.likes--
+        })
+      .catch((error) => {
+        console.log(error)
+      })
+      }
     }
   }
 }

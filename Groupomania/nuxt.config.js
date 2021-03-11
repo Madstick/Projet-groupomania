@@ -11,7 +11,7 @@ export default {
   },
 
   // Global CSS (https://go.nuxtjs.dev/config-css)
-  css: [],
+  css: ['@mdi/font/css/materialdesignicons.min.css'],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: ['~plugins/filters.js'],
@@ -23,7 +23,7 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/eslint
     // '@nuxtjs/eslint-module',
-    '@nuxtjs/vuetify',
+    ['@nuxtjs/vuetify', { iconfont: 'mdi' }]
   ],
 
   // Modules (https://go.nuxtjs.dev/config-modules)
@@ -32,6 +32,7 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/auth',
     '@nuxtjs/pwa',
+    '@nuxtjs/toast'
   ],
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
@@ -77,5 +78,9 @@ export default {
      },
      rewriteRedirects: true,
    },
+
+   toast: {
+    position: 'bottom-center',
+}
 
 }

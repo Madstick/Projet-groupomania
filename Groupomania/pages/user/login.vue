@@ -22,7 +22,7 @@ export default {
           // password: 'your_password'
           loginInfo       
       })
-      this.$store.dispatch('snackbar/setSnackbar', {text: 'Connexion'})
+      // this.$store.dispatch('snackbar/setSnackbar', {text: 'Connexion'})
       this.$router.push('/messages')
       }
       catch(error){

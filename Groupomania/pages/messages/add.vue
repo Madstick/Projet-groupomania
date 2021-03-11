@@ -53,9 +53,6 @@ export default {
         })
         .catch((error) => {
           console.log(error)
-          if (error.response.message.errors) {
-            this.errors = error.response.message.errors
-          }
         })
     },
   },
