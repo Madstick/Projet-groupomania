@@ -1,24 +1,34 @@
-
 <template>
-  <div class="container">
-    <div>
-      <h1 class="title">Votre compte</h1>
-      <img src="~/assets/icon.svg" />
-      {{userInfo.username}}
-      {{userInfo}}
-      {{msgInfo}}
-      {{likesInfo}}
+  <div v-cloak>
+    <div v-if='isLoading !== true'>
+      <div class="container">
+        <div>
+          <h1 class="title">Compte de {{userInfo.username}}</h1>
+          <img src="~/assets/icon.svg" />
+          {{userInfo}}
+          {{msgInfo}}
+          {{likesInfo}}
+        </div>
+      </div>
     </div>
-  </div>
+
+    <Loader v-else/>
+
+  </div>    
 </template>
 
 <script>
+import Loader from '@/components/Loader'
 export default {
+  components:{
+    Loader
+  },
   data() {
     return {
       userInfo:{},
       msgInfo:[],
       likesInfo:[],
+      isLoading:true,
     }
   },
   mounted(){
@@ -47,19 +57,20 @@ export default {
             })
             .catch((error) => {
               console.log(error)
-            })       
+            })     
+    this.isLoading=false           
     })
     .catch((error) => {
       this.$toast.show("Utilisateur introuvable", 
       { 
         position: "bottom-center", 
         duration : 2000,
-            action : {
+        action : {
         text : 'Fermer',
         onClick : (e, toastObject) => {
             toastObject.goAway(0);
         }
-    },
+        },
       });
       this.$router.push('/messages')
       console.log(error)

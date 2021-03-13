@@ -7,7 +7,7 @@
 
   <v-file-input
     v-model="formData.attachment"
-    :rules="[imgFormat(formData.attachment)]"
+    :rules="[imgFormat(formData.attachment), imgSize(formData.attachment)]"
     accept="image/png, image/jpeg, image/gif"
     placeholder="Votre image"
     prepend-icon="mdi-camera"
@@ -71,6 +71,7 @@
             else {
                 this.url = null
             }
+            console.log(this.formData.attachment)
         },
     },
   }

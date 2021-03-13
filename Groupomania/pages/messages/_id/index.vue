@@ -1,85 +1,81 @@
 <template>
   <div v-cloak>
-    <div v-if='isLoading !== true'>
-    <div 
-      v-if="$route.params.updated=='yes'">Record updated successfully</div>
+      <div v-if='isLoading !== true'>
+        <v-card             
+          align="center"
+          justify="center">
+          <p>Crée par <nuxt-link :to="'/user/' + message.idUSERS">{{ message.username }}</nuxt-link></p>
+          <v-card-title class="subheading font-weight-bold justify-center">
+            <h3>
+              {{ message.title }}
+            </h3>
+          </v-card-title>
 
-    <h2>{{ message.title }}</h2>
+          <v-img 
+            v-if="message.hasAttachment" 
+            :src="message.attachment"
+            max-width="1280"
+            max-height="500"
+            contain
+          ></v-img>
 
-    <p>Crée par {{ message.username }}</p>
+        <p>{{ message.content }}</p>
 
-    <img v-if="message.hasAttachment" :src="message.attachment">
+        <v-btn @click='toggleLike'>
+          <v-icon v-if="!isUserLiked">{{likeIcon}}</v-icon>
+          <v-icon v-else>{{unlikeIcon}}</v-icon>
+        </v-btn>
 
-    <p>{{ message.content }}</p>
+        <p>{{message.likes}}</p>
 
-<v-btn @click='toggleLike'>
-  <v-icon v-if="!isUserLiked">{{likeIcon}}</v-icon>
-  <v-icon v-else>{{unlikeIcon}}</v-icon>
-</v-btn>
-<p>{{message.likes}}</p>
+        <div>
+          <div>
+            <v-btn :to="'/messages/' + message.idMESSAGES + '/update'" v-if="$auth.user[0].idUSERS === message.idUSERS || ($auth.user && $auth.user[0].isAdmin)">Modifier</v-btn>
+            <v-btn @click="deleteRecord()" v-if="$auth.user[0].idUSERS === message.idUSERS || $auth.user && $auth.user[0].isAdmin">Supprimer</v-btn>
+          </div>
+          <v-btn to="/messages">Retour à l'accueil</v-btn>
+        </div>
+        </v-card>
 
-    <div>
-      <div>
-        <nuxt-link :to="'/messages/' + message.idMESSAGES + '/update'">Modifier</nuxt-link>
-        <button @click="deleteRecord()">Supprimer</button>
+        <div>
+          <form method="post" @submit.prevent="sendComment">
+            <v-text-field
+              v-model="replyMessage.content"  
+              name="content"
+              label="Votre commentaire"
+              id="com"         
+            >
+              </v-text-field>
+            <v-btn type="submit">Envoyer</v-btn>
+            <v-btn @click="clearCom()">Annuler</v-btn>
+          </form>
+        </div>
+
+        <div v-if='comments.length>0'>
+          <div v-for='message in comments' :key='message.idMESSAGES'>
+            {{message}}
+            <p>Crée par {{message.username}}</p> 
+          </div>
+        </div>
+
       </div>
-      <nuxt-link to="/messages">Retour à l'accueil</nuxt-link>
-    </div>
 
-<div>
-          <form method="post" @submit.prevent="replyMessage">
-          <v-text-field
-            v-model="replyMessage.content"  
-            name="content"
-            label="Votre message"
-            id="id"         
-          >
-            </v-text-field>
-          <button type="submit">Envoyer</button>
-          <nuxt-link to="/messages">Cancel</nuxt-link>
-        </form>
-</div>
+      <Loader v-else/>
 
-<div v-if='comments.length>0'>
-  <div v-for='message in comments' :key='message.idMESSAGES'>
-    {{message}}
-    <p>Crée par {{message.username}}</p> 
-  </div>
-</div>
-
-</div>
-    <v-container style="height: 400px;" v-else>
-      <v-row
-        class="fill-height"
-        align-content="center"
-        justify="center"
-      >
-        <v-col
-          class="subtitle-1 text-center"
-          cols="12"
-        >
-          Récupération des données
-        </v-col>
-        <v-col cols="6">
-          <v-progress-linear
-            color="deep-purple accent-4"
-            indeterminate
-            rounded
-            height="6"
-          ></v-progress-linear>
-        </v-col>
-      </v-row>
-    </v-container>
 </div>
   
 </template>
 
 <script>
+import Loader from '@/components/Loader'
 import { mdiArrowUpBoldOutline } from '@mdi/js'; 
 import { mdiArrowDownBoldOutline } from '@mdi/js'; 
 export default {
   middleware: 'auth',
-    data() {
+  components:{
+    Loader
+  },
+  data() {
     return {
       message: {
         idUSERS: this.$auth.user[0].idUSERS,
@@ -99,6 +95,9 @@ export default {
       likeIcon: mdiArrowUpBoldOutline,
       unlikeIcon: mdiArrowDownBoldOutline,
       isUserLiked: false,
+      replyMessage:{
+        content: null
+      } ,
     }
   },
   mounted(){
@@ -120,30 +119,52 @@ export default {
           this.message.hasAttachment=true;
         }  
         this.message.attachment = 'http://localhost:3000/images/'+ this.message.attachment;
-        this.isLoading=false     
+        this.isLoading=false    
         })
         .catch((error) => {
+        this.$toast.show("Il y'a eu un problème lors de la lecture du message", 
+        { 
+          position: "bottom-center", 
+          duration : 2000,
+          action : {
+          text : 'Fermer',
+          onClick : (e, toastObject) => {
+              toastObject.goAway(0);
+          }
+          },
+        });  
           console.log(error)
         })  
         this.getcomments()      
     },
 
     deleteRecord(){
-      if(confirm("Are you sure?") === true){
+      if(confirm("Êtes vous sûr?") === true){
         this.$axios.delete('http://localhost:3000/api/messages/' + this.$route.params.id)
           .then((response) => {
               this.$router.push({ name:'messages', params:{ deleted:'yes' } })           
           })
           .catch( (error) => {
+          this.$toast.show("Il y'a eu un problème lors de la suppression du message", 
+          { 
+            position: "bottom-center", 
+            duration : 2000,
+            action : {
+            text : 'Fermer',
+            onClick : (e, toastObject) => {
+                toastObject.goAway(0);
+            }
+            },
+          });  
             console.log(error);
           });
       }
     },
 
-    async replyMessage(){
+    async sendComment(){
       const formData = new FormData()
 
-      formData.append('title', 'reply:'+ this.message.title)
+      formData.append('title', this.message.title)
       formData.append('idUSERS', this.$auth.user[0].idUSERS)
       formData.append('content', this.replyMessage.content)
       formData.append('message_parent', this.message.idMESSAGES)
@@ -156,8 +177,30 @@ export default {
           console.log(response)
             this.getcomments() 
             this.replyMessage.content = null
+            this.$toast.show("Le commentaire à bien été posté", 
+            { 
+              position: "bottom-center", 
+              duration : 2000,
+              action : {
+              text : 'Fermer',
+              onClick : (e, toastObject) => {
+                  toastObject.goAway(0);
+              }
+              },
+            });
         })
         .catch((error) => {
+          this.$toast.show("Il y'a eu un problème lors de l'envoi du commentaire", 
+        { 
+          position: "bottom-center", 
+          duration : 2000,
+          action : {
+          text : 'Fermer',
+          onClick : (e, toastObject) => {
+              toastObject.goAway(0);
+          }
+          },
+        });
           console.log(error)
         })
     },
@@ -167,6 +210,17 @@ export default {
           this.comments = response.data.results
           })
         .catch((error) => {
+          this.$toast.show("Il y'a eu un problème lors de la lecture des commentaires", 
+        { 
+          position: "bottom-center", 
+          duration : 2000,
+          action : {
+          text : 'Fermer',
+          onClick : (e, toastObject) => {
+              toastObject.goAway(0);
+          }
+          },
+        });
           console.log(error)
         })
     },
@@ -179,6 +233,17 @@ export default {
         this.message.likes++
         })
       .catch((error) => {
+        this.$toast.show("Il y'a eu un problème à l'ajout du like", 
+        { 
+          position: "bottom-center", 
+          duration : 2000,
+          action : {
+          text : 'Fermer',
+          onClick : (e, toastObject) => {
+              toastObject.goAway(0);
+          }
+          },
+        });
         console.log(error)
       })
       }
@@ -189,13 +254,28 @@ export default {
         this.message.likes--
         })
       .catch((error) => {
+        this.$toast.show("Il y'a eu un problème à la suppression du like", 
+        { 
+          position: "bottom-center", 
+          duration : 2000,
+          action : {
+          text : 'Fermer',
+          onClick : (e, toastObject) => {
+              toastObject.goAway(0);
+          }
+          },
+        });
         console.log(error)
       })
       }
+    },
+    clearCom(){
+      console.log()
+      this.replyMessage.content=null
     }
   }
 }
 </script>
-<style>
+<style scoped>
 
 </style>

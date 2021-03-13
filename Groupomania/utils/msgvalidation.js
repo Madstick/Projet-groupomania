@@ -20,10 +20,17 @@ return v =>
   v && regex.test(v.type) || "Doit être un format valide ( jpg, jpeg, png ou gif )"
 }
 
+let imgSize = (attachment) => {
+  if(!attachment)
+  { return true; }
+    return v => v && 4194304 >= attachment.size || `L'image doit faire moins de 4 MB`
+}
+
 
 export default {
     required,
     minLength,
     maxLength,
-    imgFormat
+    imgFormat,
+    imgSize
   }

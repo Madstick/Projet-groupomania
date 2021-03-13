@@ -25,10 +25,31 @@ export default {
         data: 
           registrationInfo      
       })
-      // this.$store.dispatch('snackbar/setSnackbar', {text: 'Inscription réussi'})
+        this.$toast.show("Inscription réussie", 
+        { 
+          position: "bottom-center", 
+          duration : 2000,
+          action : {
+          text : 'Fermer',
+          onClick : (e, toastObject) => {
+              toastObject.goAway(0);
+          }
+          },
+        });
       this.$router.push('/')
       }
       catch(error){
+        this.$toast.show("Il y'a eu un problème au moment de l'inscription, veuillez réessayer", 
+        { 
+          position: "bottom-center", 
+          duration : 2000,
+          action : {
+          text : 'Fermer',
+          onClick : (e, toastObject) => {
+              toastObject.goAway(0);
+          }
+          },
+        });
         console.log(error)
       }
     }

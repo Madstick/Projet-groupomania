@@ -1,13 +1,41 @@
 <template>
-  <div>
-    <h1>Poster un message</h1>
-    <hr>
-    <div>
+  <div v-cloak>
+    <div v-if='isLoading !== true'>
       <div>
-        <MsgForm buttonText="Envoyer" :submitForm="submitForm" :message="message" :key="componentkey"/>
+        <h1>Modifier votre message</h1>
+        <hr>
+        <div>
+          <div>
+            <MsgForm buttonText="Envoyer" :submitForm="submitForm" :message="message" :key="componentkey"/>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
+
+    <v-container style="height: 400px;" v-else>
+      <v-row
+        class="fill-height"
+        align-content="center"
+        justify="center"
+      >
+        <v-col
+          class="subtitle-1 text-center"
+          cols="12"
+        >
+          Récupération des données
+        </v-col>
+        <v-col cols="6">
+          <v-progress-linear
+            color="deep-purple accent-4"
+            indeterminate
+            rounded
+            height="6"
+          ></v-progress-linear>
+        </v-col>
+      </v-row>
+    </v-container>
+
+  </div>    
 </template>
 
 <script>
@@ -26,6 +54,7 @@ export default {
         username: this.$auth.user[0].username,
       },
       componentkey : 0,
+      isLoading:true,
     }
   },
   mounted(){
@@ -40,7 +69,8 @@ export default {
       }
         console.log(response)
         this.message = response.data.results[0]  
-        this.componentkey++     
+        this.componentkey++ 
+        this.isLoading=false   
         })
         .catch((error) => {
           console.log(error)
@@ -66,10 +96,32 @@ export default {
         .then((response) => {
           console.log(response)
           if (response.id) {
+            this.$toast.show("Le message à bien été mis à jour", 
+            { 
+              position: "bottom-center", 
+              duration : 2000,
+              action : {
+              text : 'Fermer',
+              onClick : (e, toastObject) => {
+                  toastObject.goAway(0);
+              }
+              },
+            });            
             this.$router.push('/messages/'+ this.$route.params.id )
           }
         })
         .catch((error) => {
+          this.$toast.show("Modification impossible", 
+          { 
+            position: "bottom-center", 
+            duration : 2000,
+            action : {
+            text : 'Fermer',
+            onClick : (e, toastObject) => {
+                toastObject.goAway(0);
+            }
+            },
+          });
           console.log(error)
         })
     },

@@ -1,199 +1,203 @@
 <template>
-  <div>
-    <div class="d-flex justify-content-between align-items-center">
-      <h1>Messages</h1>
-      <nuxt-link to="/messages/add">Poster un message</nuxt-link>
+  <div v-cloak>
+    <div v-if='isLoading !== true'>
+
+    <div class="header_msg">
+      <h1>Accueil</h1>
+      <v-btn class="btn_post" color="#2196f3" elevation="5" to="/messages/add">Poster un message</v-btn>
     </div>
     <hr>
 
-    <div 
-      v-if="$route.params.created=='yes'">Le message à bien été posté</div>
-    <div 
-      v-if="$route.params.deleted=='yes'">Le message à bien été supprimé</div>
-
-
-  <div>
-
-    <v-data-iterator
-      :items="messages"
-      :items-per-page.sync="itemsPerPage"
-      :page.sync="page"
-      :search="search"
-      :sort-by="sortBy.toLowerCase()"
-      :sort-desc="sortDesc"
-      hide-default-footer
-    >
-      <template v-slot:header>
-        <v-toolbar
-          dark
-          color="blue darken-3"
-          class="mb-1"
-        >
-          <v-text-field
-            v-model="search"
-            clearable
-            flat
-            solo-inverted
-            hide-details
-            prepend-inner-icon="mdi-magnify"
-            label="Search"
-          ></v-text-field>
-          <template v-if="$vuetify.breakpoint.mdAndUp">
-            <v-spacer></v-spacer>
-            <v-select
-              v-model="sortBy"
+    <div>
+      <v-data-iterator
+        :items="messages"
+        :items-per-page.sync="itemsPerPage"
+        :page.sync="page"
+        :search="search"
+        :sort-by="sortBy.toLowerCase()"
+        :sort-desc="sortDesc"
+        hide-default-footer
+      >
+        <template v-slot:header>
+          <v-toolbar
+            dark
+            color="blue darken-3"
+            class="mb-1"
+          >
+            <v-text-field
+              v-model="search"
+              clearable
               flat
               solo-inverted
               hide-details
-              :items="keys"
               prepend-inner-icon="mdi-magnify"
-              label="Sort by"
-            ></v-select>
-            <v-spacer></v-spacer>
-            <v-btn-toggle
-              v-model="sortDesc"
-              mandatory
-            >
-              <v-btn
-                large
-                depressed
-                color="blue"
-                :value="false"
+              label="Recherche"
+            ></v-text-field>
+            
+              <v-spacer></v-spacer>
+              <v-select
+                v-model="sortBy"
+                flat
+                solo-inverted
+                hide-details
+                :items="keys"
+                item-text="label" 
+                prepend-inner-icon="mdi-magnify"
+                label="Trier par"          
+              ></v-select>
+              <v-spacer></v-spacer>
+              <v-btn-toggle
+                v-model="sortDesc"
+                mandatory
               >
-                <v-icon>mdi-arrow-up</v-icon>
-              </v-btn>
-              <v-btn
-                large
-                depressed
-                color="blue"
-                :value="true"
-              >
-                <v-icon>mdi-arrow-down</v-icon>
-              </v-btn>
-            </v-btn-toggle>
-          </template>
-        </v-toolbar>
-      </template>
-
-      <template v-slot:default="props">
-        <v-row>
-          <v-col
-            v-for="item in props.items"
-            :key="item.idMESSAGES"
-            cols="12"
-            sm="6"
-            md="4"
-            lg="3"
-          >
-            <v-card>
-              <v-card-title class="subheading font-weight-bold">
-                <nuxt-link :to="'/messages/' + item.idMESSAGES">
-                  {{ item.title }}
-                </nuxt-link>
-              </v-card-title>
-
-              <v-img 
-                height="150"
-                :src='getpostImg(item)'
-              ></v-img>
-
-              <v-list dense>
-                <v-list-item
-                  v-for="(key, index) in filteredKeys"
-                  :key="index"
+                <v-btn
+                  large
+                  depressed
+                  color="blue"
+                  :value="false"
                 >
-                  <v-list-item-content :class="{ 'blue--text': sortBy === key }">
-                    {{ key }}:
-                  </v-list-item-content>
-                  <v-list-item-content
-                    class="align-end"
-                    :class="{ 'blue--text': sortBy === key }"
+                  <v-icon>mdi-arrow-up</v-icon>
+                </v-btn>
+                <v-btn
+                  large
+                  depressed
+                  color="blue"
+                  :value="true"
+                >
+                  <v-icon>mdi-arrow-down</v-icon>
+                </v-btn>
+              </v-btn-toggle>
+            
+          </v-toolbar>
+        </template>
+
+        <template v-slot:default="props">
+          <v-row class="row_margin">
+            <v-col
+              v-for="item in props.items"
+              :key="item.idMESSAGES"
+              cols="12"
+              sm="6"
+              md="4"
+              lg="3"
+            >
+              <v-card :to="'/messages/' + item.idMESSAGES">
+                <v-card-title class="subheading font-weight-bold card_link">
+                  <h3>
+                    {{ item.title }}
+                  </h3>
+                </v-card-title>
+
+                <v-img 
+                  height="150"
+                  contain
+                  :src='getpostImg(item)'
+                ></v-img>
+
+                <v-list dense>
+                  <v-list-item
+                    v-for="(key, index) in filteredKeys"
+                    :key="index"
                   >
-                    <span v-if="key.toLowerCase() === 'created_at'"> {{ item[key.toLowerCase()]|formatDate }}</span>
-                    <span v-else>{{ item[key.toLowerCase()] }}</span>
+                    <v-list-item-content :class="{ 'blue--text': sortBy === key }">
+                      {{ key.label }}:
+                    </v-list-item-content>
+                    <v-list-item-content
+                      class="align-end"
+                      :class="{ 'blue--text': sortBy === key }"
+                    >
+                      <span v-if="key.identifier.toLowerCase() === 'created_at'"> {{ item[key.identifier.toLowerCase()]|formatDate }}</span>
+                      <span v-else>{{ item[key.identifier.toLowerCase()] }}</span>
 
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list>
-            </v-card>
-          </v-col>
-        </v-row>
-      </template>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+              </v-card>
+            </v-col>
+          </v-row>
+        </template>
 
-      <template v-slot:footer>
-        <v-row
-          class="mt-2"
-          align="center"
-          justify="center"
-        >
-        <v-col>
-          <span class="grey--text">Messages par page</span>
-          <v-menu offset-y>
-            <template v-slot:activator="{ on, attrs }">
+        <template v-slot:footer>
+          <v-row
+            class="mt-2 row_margin"
+            align="center"
+            justify="center"
+          >
+            <v-col class="col-6">
+              <span class="grey--text">Messages par page</span>
+              <v-menu offset-y>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    dark
+                    text
+                    color="primary"
+                    class=""
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    {{ itemsPerPage }}
+                    <v-icon>mdi-chevron-down</v-icon>
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item
+                    v-for="(number, index) in itemsPerPageArray"
+                    :key="index"
+                    @click="updateItemsPerPage(number)"
+                  >
+                    <v-list-item-title>{{ number }}</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </v-col>  
+              <v-spacer></v-spacer>
+            <v-col class="footer-right col-6">
+              <span
+                class="mr-4
+                grey--text"
+              >
+                Page {{ page }} de {{ numberOfPages }}
+              </span>
+              <div class="footer-right-icons">
               <v-btn
+                fab
                 dark
-                text
-                color="primary"
-                class="ml-2"
-                v-bind="attrs"
-                v-on="on"
+                color="blue darken-3"
+                class="mr-1"
+                @click="formerPage"
               >
-                {{ itemsPerPage }}
-                <v-icon>mdi-chevron-down</v-icon>
+                <v-icon>mdi-chevron-left</v-icon>
               </v-btn>
-            </template>
-            <v-list>
-              <v-list-item
-                v-for="(number, index) in itemsPerPageArray"
-                :key="index"
-                @click="updateItemsPerPage(number)"
-              >
-                <v-list-item-title>{{ number }}</v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </v-col>  
-          <v-spacer></v-spacer>
-        <v-col class="footerRight">
-          <span
-            class="mr-4
-            grey--text"
-          >
-            Page {{ page }} de {{ numberOfPages }}
-          </span>
-          <v-btn
-            fab
-            dark
-            color="blue darken-3"
-            class="mr-1"
-            @click="formerPage"
-          >
-            <v-icon>mdi-chevron-left</v-icon>
-          </v-btn>
-          <v-btn
-            fab
-            dark
-            color="blue darken-3"
-            class="ml-1"
-            @click="nextPage"
-          >
-            <v-icon>mdi-chevron-right</v-icon>
-          </v-btn>
-          </v-col>
-        </v-row>
-      </template>
-
-    </v-data-iterator>
+              <v-btn
+                fab
+                dark
+                color="blue darken-3"
+                class="ml-1"
+                @click="nextPage"
+              >             
+                <v-icon>mdi-chevron-right</v-icon>
+              </v-btn>
+              </div>
+            </v-col>
+          </v-row>
+        </template>
+      </v-data-iterator>
+    </div>
   </div>
 
+  <Loader v-else/>
 
   </div>
 </template>
 
 <script>
+import Loader from '@/components/Loader'
 export default {
   middleware: 'auth',
-    data() {
+  components:{
+    Loader
+  },
+  data() {
     return {
       message: {
         idUSERS: this.$auth.user[0].idUSERS,
@@ -213,9 +217,16 @@ export default {
       itemsPerPage: 10,
       sortBy: 'name',
       keys: [
-          'created_at',
-          'likes',
+        {
+        identifier: 'created_at',
+        label: 'Date de création'
+        },
+        {
+        identifier: 'likes',
+        label: 'J\'aimes'
+        }
         ],
+      isLoading:true,
       errors: null,
       url: null,
     }
@@ -236,7 +247,21 @@ export default {
     await this.$axios.get('http://localhost:3000/api/messages/') 
     .then((response) => {
         console.log(response)
-        this.messages = response.data.results      
+        this.messages = response.data.results   
+        this.isLoading=false    
+      if(this.$route.params.deleted=='yes'){
+        this.$toast.show("Message supprimé", 
+        { 
+          position: "bottom-center", 
+          duration : 2000,
+          action : {
+          text : 'Fermer',
+          onClick : (e, toastObject) => {
+              toastObject.goAway(0);
+          }
+          },
+        });
+      }  
         })
         .catch((error) => {
           console.log(error)
@@ -246,7 +271,7 @@ export default {
       if (item.attachment == null){
         return 'http://localhost:3000/images/default.jpg'
       }
-      return 'http://localhost:3000/images/'+ item.attachment;
+        return 'http://localhost:3000/images/'+ item.attachment;
     },
     nextPage () {
       if (this.page + 1 <= this.numberOfPages) this.page += 1
@@ -261,16 +286,49 @@ export default {
 }
 </script>
 <style scoped>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+
+@media(max-width:506px){
+  .footer-right{
+    display: flex;
+    flex-direction: column; 
+    align-items: flex-end;
+  }
+  .footer-right-icons{
+    display: flex;
+    flex-direction: row;
+  }
 }
 
-.footerRight{
+.footer-right{
   text-align: right;
 }
+
+.row_margin{
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.header_msg{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 15px
+}
+
+.btn_post{
+  color:rgba(255, 255, 255, 0.7);
+  margin-top: 15px
+}
+
+.card_link{
+  justify-content: center;
+}
+
+h3{
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
 </style>

@@ -21,11 +21,32 @@ export default {
           // username: 'your_username',
           // password: 'your_password'
           loginInfo       
-      })
-      // this.$store.dispatch('snackbar/setSnackbar', {text: 'Connexion'})
+      })        
+        this.$toast.show("Connexion réussie", 
+        { 
+          position: "bottom-center", 
+          duration : 2000,
+          action : {
+          text : 'Fermer',
+          onClick : (e, toastObject) => {
+              toastObject.goAway(0);
+          }
+          },
+        });      
       this.$router.push('/messages')
       }
-      catch(error){
+      catch(error){             
+        this.$toast.show("Connexion échouée, veuillez réessayer", 
+        { 
+          position: "bottom-center", 
+          duration : 2000,
+          action : {
+          text : 'Fermer',
+          onClick : (e, toastObject) => {
+              toastObject.goAway(0);
+          }
+          },
+        }); 
         console.log(error)
       }
     }

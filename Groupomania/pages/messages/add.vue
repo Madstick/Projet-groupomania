@@ -48,11 +48,33 @@ export default {
         .then((response) => {
           console.log(response)
           if (response.id) {
+            this.$toast.show("Le message à bien été crée", 
+            { 
+              position: "bottom-center", 
+              duration : 2000,
+              action : {
+              text : 'Fermer',
+              onClick : (e, toastObject) => {
+                  toastObject.goAway(0);
+              }
+              },
+            });
             this.$router.push('/messages/'+ response.id)
+            // this.$router.push({name:'messages-id' , params:{ id:response.id,created:'yes' } })
           }
         })
         .catch((error) => {
-          console.log(error)
+          this.$toast.show("Il y'a eu un problème lors de l'envoi du message", 
+          { 
+            position: "bottom-center", 
+            duration : 2000,
+            action : {
+            text : 'Fermer',
+            onClick : (e, toastObject) => {
+                toastObject.goAway(0);
+            }
+            },
+          });
         })
     },
   },
