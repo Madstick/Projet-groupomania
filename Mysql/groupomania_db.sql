@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 8.0.21, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.22, for Win64 (x86_64)
 --
 -- Host: localhost    Database: groupomania_db
 -- ------------------------------------------------------
@@ -7,7 +7,7 @@
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8mb4 */;
+/*!50503 SET NAMES utf8 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -34,15 +34,6 @@ CREATE TABLE `likes` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `likes`
---
-
-LOCK TABLES `likes` WRITE;
-/*!40000 ALTER TABLE `likes` DISABLE KEYS */;
-/*!40000 ALTER TABLE `likes` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `messages`
 --
 
@@ -58,23 +49,15 @@ CREATE TABLE `messages` (
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `message_parent` int DEFAULT NULL,
   `username` varchar(50) NOT NULL,
+  `enabled` tinyint NOT NULL DEFAULT '1',
   PRIMARY KEY (`idMESSAGES`),
   UNIQUE KEY `idMESSAGES_UNIQUE` (`idMESSAGES`),
   KEY `fk_MESSAGES_USERS_idx` (`idUSERS`),
   KEY `fk_MESSAGES_MESSAGES_idx` (`message_parent`),
   CONSTRAINT `fk_MESSAGES_MESSAGES` FOREIGN KEY (`message_parent`) REFERENCES `messages` (`idMESSAGES`) ON DELETE CASCADE,
   CONSTRAINT `fk_MESSAGES_USERS` FOREIGN KEY (`idUSERS`) REFERENCES `users` (`idUSERS`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `messages`
---
-
-LOCK TABLES `messages` WRITE;
-/*!40000 ALTER TABLE `messages` DISABLE KEYS */;
-/*!40000 ALTER TABLE `messages` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `users`
@@ -89,21 +72,13 @@ CREATE TABLE `users` (
   `username` varchar(60) NOT NULL,
   `password` varchar(255) NOT NULL,
   `isAdmin` tinyint NOT NULL DEFAULT '0',
+  `enabled` tinyint NOT NULL DEFAULT '1',
   PRIMARY KEY (`idUSERS`),
   UNIQUE KEY `uniqueUser_Id` (`idUSERS`),
   UNIQUE KEY `unique_Email` (`email`),
   UNIQUE KEY `unique_Username` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `users`
---
-
-LOCK TABLES `users` WRITE;
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -114,4 +89,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-11-25 15:28:36
+-- Dump completed on 2021-03-15  8:11:41

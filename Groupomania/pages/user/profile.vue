@@ -9,6 +9,7 @@
           {{userInfo}}
           {{msgInfo}}
           {{likesInfo}}
+           <v-btn @click="deleteUser()" v-if="$auth.user[0] || $auth.user && $auth.user[0].isAdmin">Supprimer mon compte</v-btn>
         </div>
       </div>
     </div>
@@ -63,6 +64,31 @@ export default {
             console.log(error)
           })   
       this.isLoading=false       
+    },
+    deleteUser(){
+      if(confirm("Êtes vous sûr?") === true){
+        this.$axios.post('http://localhost:3000/api/auth/' + this.$auth.user[0].idUSERS + '/disable')       
+          .then((response) => {
+            if($auth.user[0].isAdmin){
+              this.$router.push({ name:'user-admin-users' })    
+            }
+              this.$auth.logout()       
+          })
+          .catch( (error) => {
+          this.$toast.show("Il y'a eu un problème lors de la suppression de l'utilisateur", 
+          { 
+            position: "bottom-center", 
+            duration : 2000,
+            action : {
+            text : 'Fermer',
+            onClick : (e, toastObject) => {
+                toastObject.goAway(0);
+            }
+            },
+          });  
+            console.log(error);
+          });
+      }
     },
   }
 }

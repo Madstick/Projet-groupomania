@@ -42,8 +42,9 @@
                 hide-details
                 :items="keys"
                 item-text="label" 
+                item-value ="identifier"
                 prepend-inner-icon="mdi-magnify"
-                label="Trier par"          
+                label="Trier par"                     
               ></v-select>
               <v-spacer></v-spacer>
               <v-btn-toggle
@@ -99,12 +100,11 @@
                     v-for="(key, index) in filteredKeys"
                     :key="index"
                   >
-                    <v-list-item-content :class="{ 'blue--text': sortBy === key }">
+                    <v-list-item-content>
                       {{ key.label }}:
                     </v-list-item-content>
                     <v-list-item-content
-                      class="align-end"
-                      :class="{ 'blue--text': sortBy === key }"
+                      class="align-end"                     
                     >
                       <span v-if="key.identifier.toLowerCase() === 'created_at'"> {{ item[key.identifier.toLowerCase()]|formatDate }}</span>
                       <span v-else>{{ item[key.identifier.toLowerCase()] }}</span>

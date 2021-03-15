@@ -3,7 +3,7 @@
       <v-app-bar app color="blue">
         <div v-if="$auth.loggedIn">
           <v-btn text to='/messages'>Accueil</v-btn>
-          <v-btn text to="user/admin-users" v-if="$auth.user && $auth.user[0].isAdmin">Admin</v-btn>
+          <v-btn text to="/user/admin-users" v-if="$auth.user && $auth.user[0].isAdmin">Admin</v-btn>
         </div>
         <div v-else>
          <v-btn text to="/">Accueil</v-btn>
@@ -21,6 +21,9 @@
       </v-app-bar>  
 
     <v-main>
+      <div v-if="!$auth.loggedIn && $route.name !== 'index' && $route.name !== 'user-login' && $route.name !== 'user-register'">
+        <p>Votre session à expirée, veuillez vous reconnecter</p>
+      </div>
       <Nuxt />
     </v-main>  
     </v-app>

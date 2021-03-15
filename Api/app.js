@@ -1,7 +1,7 @@
 require('dotenv').config()
 const express = require('express')
-const bodyParser = require('body-parser') // Pour faciliter le traitement des données contenues dans le corp de la reqûete, le transformant en objet JSON
 const path = require ('path') // Pour le middleware express static qui permet d'acceder au chemin du système de fichier
+const cors = require ('cors')
 
 const messageRoutes = require('./routes/message')
 const userRoutes = require('./routes/user')
@@ -16,10 +16,26 @@ app.use((req, res, next) => {
   next()
 })
 
-app.use(bodyParser.urlencoded({
+var allowedOrigins = ['http://localhost:3000',
+                      'http://localhost:8000'];
+app.use(cors({
+  origin: function(origin, callback){
+    // allow requests with no origin 
+    // (like mobile apps or curl requests)
+    if(!origin) return callback(null, true);
+    if(allowedOrigins.indexOf(origin) === -1){
+      var msg = 'The CORS policy for this site does not ' +
+                'allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  }
+}));  
+
+app.use(express.urlencoded({
   extended: true
 }));
-app.use(bodyParser.json()); 
+app.use(express.json()); 
 
 app.use('/images',express.static('images'))
 

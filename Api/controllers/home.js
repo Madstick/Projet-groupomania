@@ -7,7 +7,7 @@ exports.home = ( req, res ,next ) => {
         <title>Document</title>
     </head>
     <body>
-        <p>Bien sur le back office de Groupomania</p>
+        <p>Bienvenue sur le back office de Groupomania</p>
     </body>
     </html>`)
 }

@@ -36,7 +36,7 @@ export default {
       this.$router.push('/messages')
       }
       catch(error){             
-        this.$toast.show("Connexion échouée, veuillez réessayer", 
+        this.$toast.show(error.response.data.message, 
         { 
           position: "bottom-center", 
           duration : 2000,
@@ -47,7 +47,7 @@ export default {
           }
           },
         }); 
-        console.log(error)
+        console.log(error.response)
       }
     }
   }

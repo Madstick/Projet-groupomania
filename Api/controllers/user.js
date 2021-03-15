@@ -31,7 +31,7 @@ exports.login = (req, res, next) => {
   const passReq = req.body.password
   if (userReq && passReq) {
     conn.query(
-      'SELECT * FROM users WHERE email= ?',
+      'SELECT * FROM users WHERE email= ? AND enabled = 1',
       userReq,
       function (_error, results, _fields) {
         if (results && results.length > 0) {
@@ -75,9 +75,16 @@ exports.login = (req, res, next) => {
   }
 }
 
+exports.logout = (req, res, next) => {
+  const token = req.headers.authorization.split(' ')[1]
+  const decodedToken = jwt.verify(token, config.token)
+  // decodedToken.exp
+    res.status(200).json({ message : "Vous avez bien été déconnecté "})
+}
+
 exports.getAllUsers = (req, res, next) => {
   conn.query(
-    'SELECT idUSERS, username, isAdmin, email FROM users',
+    'SELECT idUSERS, username, isAdmin, email, enabled FROM users',
     function (error, results, fields) {
       if (error) {
         return res.status(400).json(error)
@@ -138,12 +145,35 @@ exports.getUserLikes = (req, res, next) => {
   )
 }
 
-exports.deleteUser = (req, res, next) => {
+exports.disableUser = (req, res, next) => {
   const token = req.headers.authorization.split(' ')[1]
   const decodedToken = jwt.verify(token, config.token)
-  if((decodedToken.role === 'admin' && decodedToken.userId !== req.params.id ) || decodedToken.userId === req.params.id ){
+  console.log(decodedToken.userId,req.params.id)
+  if((decodedToken.role === 'admin' && decodedToken.userId !== parseInt(req.params.id) ) || decodedToken.userId === parseInt(req.params.id) ){
     conn.query(
-      `DELETE FROM users WHERE idUSERS=${req.params.id}`,
+      `UPDATE users SET enabled = 0 WHERE idUSERS=?`,
+      req.params.id,
+      function (error, results, fields) {
+        if (error) {
+          return res.status(400).json(error)
+        }
+        if (decodedToken.userId === req.params.id){
+        }        
+        return res
+          .status(200)
+          .json({ message: 'Le compte a bien été supprimé !' })
+      }
+    )
+  }
+  return res.status(401).json({ message: 'Supression non autorisée' })
+}
+
+exports.enableUser = (req, res, next) => {
+  const token = req.headers.authorization.split(' ')[1]
+  const decodedToken = jwt.verify(token, config.token)
+  if((decodedToken.role === 'admin' && decodedToken.userId !== req.params.id )){
+    conn.query(
+      `UPDATE users SET enabled = 1 WHERE idUSERS=?`,
       req.params.id,
       function (error, results, fields) {
         if (error) {
@@ -151,7 +181,27 @@ exports.deleteUser = (req, res, next) => {
         }
         return res
           .status(200)
-          .json({ message: 'Le compte a bien été supprimé !' })
+          .json({ message: 'Le compte a bien été restauré !' })
+      }
+    )
+  }
+  return res.status(401).json({ message: 'Restauration non autorisée' })
+}
+
+exports.deleteUser = (req, res, next) => {
+  const token = req.headers.authorization.split(' ')[1]
+  const decodedToken = jwt.verify(token, config.token)
+  if((decodedToken.role === 'admin' && decodedToken.userId !== req.params.id )){
+    conn.query(
+      `DELETE FROM users WHERE idUSERS=?`,
+      req.params.id,
+      function (error, results, fields) {
+        if (error) {
+          return res.status(400).json(error)
+        }
+        return res
+          .status(200)
+          .json({ message: 'Le compte a bien été supprimé définitivement!' })
       }
     )
   }
