@@ -3,8 +3,7 @@ let required = (propertyType, customErrorMessage) => {
   }
 let minLength = (propertyType, minLength) => {
     return v => {
-      if(!v){ return true; }
-  
+      if(!v){ return true; }  
       return v.length >= minLength || `${propertyType} doit être plus de ${minLength} charactères`;
     }
   }

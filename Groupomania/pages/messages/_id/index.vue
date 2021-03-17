@@ -6,9 +6,9 @@
           justify="center">
           <p>Crée par <nuxt-link :to="'/user/' + message.idUSERS">{{ message.username }}</nuxt-link></p>
           <v-card-title class="subheading font-weight-bold justify-center">
-            <h3>
+            <h1>
               {{ message.title }}
-            </h3>
+            </h1>
           </v-card-title>
 
           <v-img 
@@ -26,7 +26,7 @@
           <v-icon v-else>{{unlikeIcon}}</v-icon>
         </v-btn>
 
-        <p>{{message.likes}}</p>
+        <p>J'aimes :{{message.likes}}</p>
 
         <div>
           <div>
@@ -53,8 +53,10 @@
 
         <div v-if='comments.length>0'>
           <div v-for='message in comments' :key='message.idMESSAGES'>
-            {{message}}
-            <p>Crée par {{message.username}}</p> 
+            <!-- {{message}} -->
+            <p>{{message.content}}</p>
+            <p>Commentaire de {{message.username}} écrit le {{message.created_at}}</p>             
+            <v-btn @click="deleteComment()" v-if="$auth.user[0].idUSERS === message.idUSERS || $auth.user && $auth.user[0].isAdmin">Supprimer</v-btn>
           </div>
         </div>
 
@@ -85,6 +87,7 @@ export default {
         hasAttachment:false,
         username: this.$auth.user[0].username,
         created_at_formated: '',
+        // created_at: new Date,
         message_parent:null,
         likes:0,
       },
@@ -174,7 +177,6 @@ export default {
         .$post('http://localhost:3000/api/messages/', formData, {
         })
         .then((response) => {
-          console.log(response)
             this.getcomments() 
             this.replyMessage.content = null
             this.$toast.show("Le commentaire à bien été posté", 
@@ -207,6 +209,7 @@ export default {
     async getcomments(){
       await this.$axios.get('http://localhost:3000/api/messages/comments/' + this.$route.params.id ) 
       .then((response) => {
+          console.log(response)
           this.comments = response.data.results
           })
         .catch((error) => {
@@ -224,6 +227,41 @@ export default {
           console.log(error)
         })
     },
+
+    // deleteComment(){
+    //   if(confirm("Êtes vous sûr?") === true){
+    //     this.$axios.delete('http://localhost:3000/api/messages/' + this.idMESSAGES)
+    //       .then((response) => {
+    //         this.$router.push('/messages/'+ this.$route.params.id ) 
+    //         this.$toast.show("Le commentaire à bien été supprimé", 
+    //         { 
+    //           position: "bottom-center", 
+    //           duration : 2000,
+    //           action : {
+    //           text : 'Fermer',
+    //           onClick : (e, toastObject) => {
+    //               toastObject.goAway(0);
+    //           }
+    //           },
+    //         });          
+    //       })
+    //       .catch( (error) => {
+    //       this.$toast.show("Il y'a eu un problème lors de la suppression du commentaire", 
+    //       { 
+    //         position: "bottom-center", 
+    //         duration : 2000,
+    //         action : {
+    //         text : 'Fermer',
+    //         onClick : (e, toastObject) => {
+    //             toastObject.goAway(0);
+    //         }
+    //         },
+    //       });  
+    //         console.log(error);
+    //       });
+    //   }
+    // },
+
     async toggleLike(){
       this.isUserLiked = !this.isUserLiked
       if (this.isUserLiked){

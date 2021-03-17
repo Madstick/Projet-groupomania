@@ -1,10 +1,12 @@
 <template>
-  <v-container >
-    <h1>Connexion</h1>
   <div>
-    <UserAuthForm buttonText="Connexion" :submitForm="loginUser" />
+    <h1 class='text-center margin'>Connexion</h1>
+    <div>
+      <UserAuthForm buttonText="Connexion" :submitForm="loginUser" />
+    </div>  
+    <p class='text-center margin'>En cas d'oubli d'identifiant/mot de passe , veuillez contacter un modérateur.</p>
+    <img src="~/assets/icon-above-font.svg" class="img-marg"/>
   </div>  
-  </v-container>  
 </template>
 
 <script>
@@ -54,6 +56,19 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style>
+.margin{
+  margin: 24px 0px;
+}
 
+.img-marg{
+  margin-top: 24px;
+}
+
+@media (min-width:768px){
+  .img-marg{
+    height: 380px;
+    width: 100%;
+  }
+}
 </style>

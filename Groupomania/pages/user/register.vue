@@ -1,13 +1,13 @@
 <template>
-  <v-container >
-    <h1>Inscription</h1>
+  <div>
+    <h1 class='text-center margin'>Inscription</h1>
   <div>
     <UserAuthForm buttonText="Inscription" :submitForm="registerUser" hasName="true" />
   </div>  
-  <div>
-    <p>Règles d'utilisation : </p>
+  <div class='text-center margin'>
+    <h2>Règles d'utilisation : </h2>
   </div>
-  </v-container>  
+  </div>  
 </template>
 
 <script>

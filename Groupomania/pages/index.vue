@@ -12,7 +12,7 @@ export default {}
 
 </script>
 
-<style scoped>
+<style>
 .container {
   margin: 0 auto;
   min-height: 100vh;
@@ -21,4 +21,13 @@ export default {}
   align-items: center;
   text-align: center;
 }
+
+.d-flex{
+  display: flex;
+}
+
+.text-center{
+  text-align: center;
+}
+
 </style>

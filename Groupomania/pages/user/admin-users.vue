@@ -1,25 +1,22 @@
 <template>
   <div>
-    <!-- <div v-for='items in users' :key='items.idUSERS'> -->
-      <!-- {{items}} -->
     <template>
       <div>
         <v-data-table
           :headers="headers"
           :items="users"
-          item-key="items.idUSERS"
+          item-key="users.idUSERS"
           class="elevation-1"
           :search="search"
-          :custom-filter="filterOnlyCapsText"
+          :custom-filter="filterText"
         >
           <template v-slot:top>
             <v-text-field
               v-model="search"
-              label="Recherche (MAJUSCULES SEULEMENT)"
+              label="Recherche"
               class="mx-4"
             ></v-text-field>
           </template>
-          <p>{{users.username}}</p>
         </v-data-table>
     </div>
   </template>
@@ -58,10 +55,10 @@ export default {
   computed: {
     headers () {
       return [
-        { text: 'Nom utilisateur', align: 'start', value: 'users.username' },
-        { text: 'ID utilisateur', value: 'users.idUSERS' },
-        { text: 'E-mail', value: 'users.email' },
-        { text: 'Privilèges', value: 'users.isAdmin' },
+        { text: 'Nom utilisateur', align: 'start', value: 'username' },
+        { text: 'ID utilisateur', value: 'idUSERS' },
+        { text: 'E-mail', value: 'email' },
+        { text: 'Privilèges', value: 'isAdmin' },
         { text: 'Actions', sortable: false,},
       ]
     },
@@ -77,11 +74,11 @@ export default {
         console.log(error)
       });
     },
-    filterOnlyCapsText (value, search, item) {
+    filterText (value, search, item) {
         return value != null &&
           search != null &&
-          typeof value === 'string' &&
-          value.toString().toLocaleUpperCase().indexOf(search) !== -1
+          typeof value === 'string' && 
+          value.toString().indexOf(search) !== -1
       },
   }
 }

@@ -20,35 +20,56 @@
       </div>
       </v-app-bar>  
 
+      <!-- <v-footer
+        color="primary lighten-1"
+        padless
+      >
+        <v-row
+          justify="center"
+          no-gutters
+        >
+          <v-btn
+            v-for="link in links"
+            :key="link"
+            color="white"
+            text
+            rounded
+            class="my-2"
+          >
+            {{ link }}
+          </v-btn>
+          <v-col
+            class="primary lighten-2 py-4 text-center white--text"
+            cols="12"
+          >
+            {{ new Date().getFullYear() }} — <strong>Vuetify</strong>
+          </v-col>
+        </v-row>
+      </v-footer>   -->
+
     <v-main>
       <div v-if="!$auth.loggedIn && $route.name !== 'index' && $route.name !== 'user-login' && $route.name !== 'user-register'">
-        <p>Votre session à expirée, veuillez vous reconnecter</p>
+        <p class="text-center exp-session">Votre session à expirée, veuillez vous reconnecter</p>
       </div>
       <Nuxt />
     </v-main>  
     </v-app>
 </template>
 
+<script>
+  export default {
+    data: () => ({
+      links: [
+        'A propos',
+        'Nous contacter',
+      ],
+    }),
+  }
+</script>
+
 <style>
-
-
-/* html {
-  font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    Roboto, 'Helvetica Neue', Arial, sans-serif;
-  font-size: 16px;
-  word-spacing: 1px;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  box-sizing: border-box;
+.exp-session{
+  font-size: 42px;
+  margin-top: 42px;
 }
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-} */
-
 </style>

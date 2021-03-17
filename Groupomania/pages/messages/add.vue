@@ -60,7 +60,6 @@ export default {
               },
             });
             this.$router.push('/messages/'+ response.id)
-            // this.$router.push({name:'messages-id' , params:{ id:response.id,created:'yes' } })
           }
         })
         .catch((error) => {

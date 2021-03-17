@@ -16,7 +16,7 @@
   ></v-file-input>
 
   <div v-if="url" id="preview">
-            <img :src="url"/>
+            <img :src="url" id="preview-img"/>
   </div>
 
     <v-textarea v-model="formData.content"
@@ -78,4 +78,14 @@
 </script>
 
 <style lang="scss" scoped>
+
+#preview{
+  display: flex;
+  justify-content: center;
+}
+
+#preview-img{
+  max-width:1280px;
+  max-height:500px;
+}
 </style> 

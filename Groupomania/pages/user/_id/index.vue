@@ -1,14 +1,19 @@
 <template>
   <div v-cloak>
     <div v-if='isLoading !== true'>
-      <div class="container">
+      <div class="d-flex justify-center align-center flex-column">
+        <h1 class="title">Compte de {{userInfo.username}}</h1>
+        <img src="~/assets/icon-left-font.svg" />
         <div>
-          <h1 class="title">Compte de {{userInfo.username}}</h1>
-          <img src="~/assets/icon.svg" />
-          {{userInfo}}
-          {{msgInfo}}
-          {{likesInfo}}
+          <p class="text-center">Messages postés (commentaires inclus) : {{userInfo.nombre_message}}</p>
         </div>
+
+        <div>
+          <p>Total de j'aimes : {{userInfo.nombre_likes}}</p>
+        </div>    
+        <!-- {{userInfo}} -->
+        {{msgInfo}}
+        {{likesInfo}}
       </div>
     </div>
 

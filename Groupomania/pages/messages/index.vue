@@ -2,11 +2,10 @@
   <div v-cloak>
     <div v-if='isLoading !== true'>
 
-    <div class="header_msg">
+    <div class="header_msg align-center">
       <h1>Accueil</h1>
       <v-btn class="btn_post" color="#2196f3" elevation="5" to="/messages/add">Poster un message</v-btn>
     </div>
-    <hr>
 
     <div>
       <v-data-iterator
@@ -83,7 +82,7 @@
               lg="3"
             >
               <v-card :to="'/messages/' + item.idMESSAGES">
-                <v-card-title class="subheading font-weight-bold card_link">
+                <v-card-title class="subheading font-weight-bold justify-center">
                   <h3>
                     {{ item.title }}
                   </h3>
@@ -123,7 +122,7 @@
             align="center"
             justify="center"
           >
-            <v-col class="col-6">
+            <v-col class="col-6 footer-left align-center">
               <span class="grey--text">Messages par page</span>
               <v-menu offset-y>
                 <template v-slot:activator="{ on, attrs }">
@@ -303,6 +302,15 @@ export default {
   text-align: right;
 }
 
+.footer-right span{
+  padding-right: 7px;
+}
+
+.footer-left{
+  height: 104px;
+  display: flex;
+}
+
 .row_margin{
   margin-left: 0;
   margin-right: 0;
@@ -312,17 +320,12 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: center;
   padding: 20px 15px
 }
 
 .btn_post{
   color:rgba(255, 255, 255, 0.7);
   margin-top: 15px
-}
-
-.card_link{
-  justify-content: center;
 }
 
 h3{

@@ -1,18 +1,76 @@
 <template>
   <div v-cloak>
     <div v-if='isLoading !== true'>
-      <div class="container">
+      <div class="d-flex justify-center align-center flex-column">
+        <img src="~/assets/icon-left-font.svg" class="img-marg-profile"/>        
+        <h1>Compte de {{userInfo.username}}</h1>
         <div>
-          <h1 class="title">Votre compte</h1>
-          <img src="~/assets/icon.svg" />
-          {{userInfo.username}}
-          {{userInfo}}
-          {{msgInfo}}
-          {{likesInfo}}
-           <v-btn @click="deleteUser()" v-if="$auth.user[0] || $auth.user && $auth.user[0].isAdmin">Supprimer mon compte</v-btn>
+          <p class="text-center">Mes messages postés (commentaires inclus) : {{userInfo.nombre_message}}</p>
         </div>
+
+        <div>
+          <p>Mes j'aimes : {{userInfo.nombre_likes}}</p>
+        </div>    
+        <!-- {{userInfo}} -->
+        <!-- {{msgInfo}} -->
+        {{likesInfo}}
+        <v-simple-table
+          fixed-header
+          height="300px"
+          class="col-5"
+        >
+          <template v-slot:default>
+            <thead>
+              <tr>
+                <th class="text-left">
+                  Titre
+                </th>
+                <th class="text-left">
+                  Contenu
+                </th>              
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="item in msgInfo"
+                :key="item.name"
+              >              
+                <td>{{ item.title }}</td>
+                <td>{{ item.content }}</td>
+              </tr>
+            </tbody>
+          </template>
+        </v-simple-table>
+
+        <v-simple-table
+          fixed-header
+          height="300px"
+          class="col-5"
+        >
+          <template v-slot:default>
+            <thead>
+              <tr>
+                <th class="text-left">
+                  Titre
+                </th>             
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="item in likesInfo"
+                :key="item.name"
+              >              
+                <td>{{ item.title }}</td>
+              </tr>
+            </tbody>
+          </template>
+        </v-simple-table>
+           <v-btn @click="deleteUser()" v-if="$auth.user[0] || $auth.user && $auth.user[0].isAdmin">Supprimer mon compte</v-btn>
       </div>
+
+      
     </div>
+    
 
     <Loader v-else/>
     
@@ -96,12 +154,22 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+.img-marg-profile{
+  margin-top: 24px;
+  height: 180px;
+  width: 100%;
+}
+
+@media (max-width:580px){
+  .img-marg-profile{
+    height: 110px;
+    margin-top: 14px;
+  }
+}
+
+td {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 </style>

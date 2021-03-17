@@ -84,6 +84,40 @@ exports.getComment = (req, res, next) => {
     })
 }
 
+// exports.deleteComment = (req, res, next) => {
+//     const token = req.headers.authorization.split(' ')[1]
+//     const decodedToken = jwt.verify(token, config.token)
+//     const userId = decodedToken.userId
+//     const role = decodedToken.role
+//     const idMessage = req.params.id
+//     conn.query("SELECT * FROM messages WHERE messages.message_parent= ? AND idMESSAGES=?", 
+//         [idMessage], function (
+//         error,
+//         results,
+//         fields
+//     ) {
+//         if (error) {
+//             return res.status(400).json(error)
+//         }
+//         const messageIdUser = results[0].idUSERS
+//         if (userId !== messageIdUser && role !== 'admin') {
+//             return res.status(401).json({message: 'Accès non autorisé'})
+//         }
+//         conn.query(
+//             `DELETE FROM messages WHERE idMESSAGES=? AND idUSERS=${userId}`,
+//             req.params.id,
+//             function (error, results, fields) {
+//                 if (error) {
+//                     return res.status(400).json(error)
+//                 }         
+//                 return res
+//                     .status(200)
+//                     .json({message: 'Votre message a bien été supprimé !'})
+//             }
+//         )
+//     })
+// }
+
 exports.getAllMessages = (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1]
     const decodedToken = jwt.verify(token, config.token)
@@ -171,7 +205,7 @@ exports.deleteMessage = (req, res, next) => {
                 fs.unlinkSync(`images/${filename}`)
             } 
             conn.query(
-                `DELETE FROM messages WHERE idMESSAGES=${req.params.id}`,
+                `DELETE FROM messages WHERE idMESSAGES=?`,
                 req.params.id,
                 function (error, results, fields) {
                     if (error) {
