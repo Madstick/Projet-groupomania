@@ -2,10 +2,13 @@
   <div v-cloak>
     <div v-if='isLoading !== true'>
       <div class="d-flex justify-center align-center flex-column">
-        <img src="~/assets/icon-left-font.svg" class="img-marg-profile"/>        
+        <svg class="svg-header">
+          <image href="~/assets/icon-left-font.svg" class="marg-profile svg-img"/>
+        </svg>
+     
         <h1>Compte de {{userInfo.username}}</h1>
-        <div>
-          <p class="text-center">Mes messages postés (commentaires inclus) : {{userInfo.nombre_message}}</p>
+        <div class="marg-profile">
+          <p class="text-center">Mes messages postés : {{userInfo.nombre_message}}</p>
         </div>
 
         <div>
@@ -13,11 +16,11 @@
         </div>    
         <!-- {{userInfo}} -->
         <!-- {{msgInfo}} -->
-        {{likesInfo}}
+        <!-- {{likesInfo}} -->
         <v-simple-table
           fixed-header
           height="300px"
-          class="col-5"
+          class="col-11"
         >
           <template v-slot:default>
             <thead>
@@ -27,16 +30,18 @@
                 </th>
                 <th class="text-left">
                   Contenu
-                </th>              
+                </th>            
               </tr>
             </thead>
             <tbody>
               <tr
                 v-for="item in msgInfo"
                 :key="item.name"
+                @click="linktoMessage(item)"
+                class="hover-link"
               >              
-                <td>{{ item.title }}</td>
-                <td>{{ item.content }}</td>
+                <td class="td-width">{{ item.title }}</td>
+                <td class="td-width">{{ item.content }}</td>
               </tr>
             </tbody>
           </template>
@@ -45,7 +50,7 @@
         <v-simple-table
           fixed-header
           height="300px"
-          class="col-5"
+          class="col-8"
         >
           <template v-slot:default>
             <thead>
@@ -59,13 +64,15 @@
               <tr
                 v-for="item in likesInfo"
                 :key="item.name"
+                @click="linktoMessage(item)"
+                class="hover-link"
               >              
-                <td>{{ item.title }}</td>
+                <td class="td-width">{{ item.title }}</td>
               </tr>
             </tbody>
           </template>
         </v-simple-table>
-           <v-btn @click="deleteUser()" v-if="$auth.user[0] || $auth.user && $auth.user[0].isAdmin">Supprimer mon compte</v-btn>
+           <v-btn @click="deleteUser()" v-if="$auth.user[0] || $auth.user && $auth.user[0].isAdmin" class="marg-btn">Supprimer mon compte</v-btn>
       </div>
 
       
@@ -148,28 +155,47 @@ export default {
           });
       }
     },
+    linktoMessage(message){
+      this.$router.push('/messages/' + message.idMESSAGES)
+    }
   }
 }
 
 </script>
 
 <style scoped>
-.img-marg-profile{
+.hover-link{
+  cursor:pointer;
+}
+.marg-profile{
   margin-top: 24px;
-  height: 180px;
-  width: 100%;
 }
 
-@media (max-width:580px){
-  .img-marg-profile{
-    height: 110px;
-    margin-top: 14px;
-  }
+.svg-img{
+  width: 420px;
+  height: 150px;
+}
+.svg-header{
+  height: 150px;
+  width: 420px;
 }
 
-td {
+.td-width {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  max-width: 140px;
+}
+
+@media (max-width:420px){
+  .svg-img{
+    height: 60px;
+    width: 310px;
+  }
+  .svg-header{
+    height: 60px;
+    margin-top: 14px;
+    width: 310px;
+  }
 }
 </style>

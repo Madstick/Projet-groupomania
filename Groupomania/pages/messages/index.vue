@@ -1,10 +1,13 @@
 <template>
   <div v-cloak>
-    <div v-if='isLoading !== true'>
+    <div v-if='isLoading !== true' class="main-messages">
 
-    <div class="header_msg align-center">
+    <div class="header-msg align-center">
+      <svg width="420" height="120" class="svg-header">
+        <image href="~/assets/icon-left-font-monochrome-black.svg" height="120" width="420" class="header-img"/>
+      </svg>
       <h1>Accueil</h1>
-      <v-btn class="btn_post" color="#2196f3" elevation="5" to="/messages/add">Poster un message</v-btn>
+      <v-btn class="btn_post" color="#207ec8" elevation="5" to="/messages/add">Poster un message</v-btn>
     </div>
 
     <div>
@@ -20,8 +23,8 @@
         <template v-slot:header>
           <v-toolbar
             dark
-            color="blue darken-3"
-            class="mb-1"
+            color="#091f43"
+            class="mb-6 border-red"
           >
             <v-text-field
               v-model="search"
@@ -285,6 +288,14 @@ export default {
 }
 </script>
 <style scoped>
+.main-messages{
+  background-color: #fafafa;
+}
+.border-red{
+  height: auto !important;
+  /* border-top: 2px solid #d1515a !important;
+  border-bottom: 2px solid #d1515a !important; */
+}
 
 @media(max-width:506px){
   .footer-right{
@@ -295,6 +306,14 @@ export default {
   .footer-right-icons{
     display: flex;
     flex-direction: row;
+  }
+  .svg-header{
+    width: 300px;
+    height: 70px;
+  }
+  .header-img{
+    width: 300px;
+    height: 70px;
   }
 }
 
@@ -316,11 +335,11 @@ export default {
   margin-right: 0;
 }
 
-.header_msg{
+.header-msg{
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 20px 15px
+  padding: 20px 15px;
 }
 
 .btn_post{

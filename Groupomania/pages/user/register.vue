@@ -19,12 +19,11 @@ export default {
   methods: {
     async registerUser(registrationInfo){
       try{
-        await this.$axios.post('http://localhost:3000/api/auth/signup', registrationInfo)
-        
+        await this.$axios.post('http://localhost:3000/api/auth/signup', registrationInfo)       
         await this.$auth.loginWith('local', {
         data: 
           registrationInfo      
-      })
+        })
         this.$toast.show("Inscription réussie", 
         { 
           position: "bottom-center", 
@@ -36,21 +35,21 @@ export default {
           }
           },
         });
-      this.$router.push('/')
+        this.$router.push('/messages')
       }
       catch(error){
-        this.$toast.show("Il y'a eu un problème au moment de l'inscription, veuillez réessayer", 
-        { 
-          position: "bottom-center", 
-          duration : 2000,
-          action : {
-          text : 'Fermer',
-          onClick : (e, toastObject) => {
-              toastObject.goAway(0);
-          }
-          },
-        });
-        console.log(error)
+      this.$toast.show("Il y'a eu un problème au moment de l'inscription, veuillez réessayer", 
+      { 
+        position: "bottom-center", 
+        duration : 2000,
+        action : {
+        text : 'Fermer',
+        onClick : (e, toastObject) => {
+            toastObject.goAway(0);
+        }
+        },
+      });
+      console.log(error)
       }
     }
   }

@@ -75,6 +75,7 @@ exports.login = (req, res, next) => {
   }
 }
 
+// En cas de deconnexion de l'utilisateur pour faire une action
 exports.logout = (req, res, next) => {
   const token = req.headers.authorization.split(' ')[1]
   const decodedToken = jwt.verify(token, config.token)
@@ -151,9 +152,10 @@ exports.disableUser = (req, res, next) => {
   console.log(decodedToken.userId,req.params.id)
   if((decodedToken.role === 'admin' && decodedToken.userId !== parseInt(req.params.id) ) || decodedToken.userId === parseInt(req.params.id) ){
     conn.query(
-      `UPDATE users SET enabled = 0 WHERE idUSERS=?`,
+      "UPDATE users SET enabled = 0 WHERE idUSERS=?",
       req.params.id,
       function (error, results, fields) {
+        console.log(results)
         if (error) {
           return res.status(400).json(error)
         }
@@ -165,7 +167,7 @@ exports.disableUser = (req, res, next) => {
       }
     )
   }
-  return res.status(401).json({ message: 'Supression non autorisée' })
+  // return res.status(401).json({ message: 'Supression non autorisée' })
 }
 
 exports.enableUser = (req, res, next) => {
@@ -173,7 +175,7 @@ exports.enableUser = (req, res, next) => {
   const decodedToken = jwt.verify(token, config.token)
   if((decodedToken.role === 'admin' && decodedToken.userId !== req.params.id )){
     conn.query(
-      `UPDATE users SET enabled = 1 WHERE idUSERS=?`,
+      "UPDATE users SET enabled = 1 WHERE idUSERS=?",
       req.params.id,
       function (error, results, fields) {
         if (error) {
@@ -185,7 +187,7 @@ exports.enableUser = (req, res, next) => {
       }
     )
   }
-  return res.status(401).json({ message: 'Restauration non autorisée' })
+  // return res.status(401).json({ message: 'Restauration non autorisée' })
 }
 
 exports.deleteUser = (req, res, next) => {
@@ -193,7 +195,7 @@ exports.deleteUser = (req, res, next) => {
   const decodedToken = jwt.verify(token, config.token)
   if((decodedToken.role === 'admin' && decodedToken.userId !== req.params.id )){
     conn.query(
-      `DELETE FROM users WHERE idUSERS=?`,
+      "DELETE FROM users WHERE idUSERS=?",
       req.params.id,
       function (error, results, fields) {
         if (error) {
@@ -205,5 +207,5 @@ exports.deleteUser = (req, res, next) => {
       }
     )
   }
-  return res.status(401).json({ message: 'Supression non autorisée' })
+  // return res.status(401).json({ message: 'Supression non autorisée' })
 }

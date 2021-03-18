@@ -5,7 +5,7 @@
         <h1 class="title">Compte de {{userInfo.username}}</h1>
         <img src="~/assets/icon-left-font.svg" />
         <div>
-          <p class="text-center">Messages postés (commentaires inclus) : {{userInfo.nombre_message}}</p>
+          <p class="text-center">Messages postés : {{userInfo.nombre_message}}</p>
         </div>
 
         <div>
@@ -14,6 +14,7 @@
         <!-- {{userInfo}} -->
         {{msgInfo}}
         {{likesInfo}}
+        <v-btn @click="deleteUser()" v-if="$auth.user && $auth.user[0].isAdmin" class="marg-btn">Supprimer mon compte</v-btn>
       </div>
     </div>
 

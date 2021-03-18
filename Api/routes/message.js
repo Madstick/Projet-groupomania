@@ -11,7 +11,6 @@ router.get('/:id', auth, messageCtrl.getMessage)
 router.put('/:id', auth, multer, messageCtrl.modifyMessage)
 router.delete('/:id', auth, messageCtrl.deleteMessage)
 router.get('/comments/:id', auth, messageCtrl.getComment)
-// router.delete('/comments/:id', auth, messageCtrl.deleteComment)
 router.post('/like/:id', auth, messageCtrl.addLike)
 router.delete('/like/:id', auth, messageCtrl.removeLike)
 

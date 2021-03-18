@@ -5,19 +5,27 @@
                   :rules="[required('titre'), minLength('Le titre', 2), maxLength('Le titre', 50)]"
     />
 
-  <v-file-input
-    v-model="formData.attachment"
-    :rules="[imgFormat(formData.attachment), imgSize(formData.attachment)]"
-    accept="image/png, image/jpeg, image/gif"
-    placeholder="Votre image"
-    prepend-icon="mdi-camera"
-    label="Votre image"
-    @change='handleFileUpload()'
-  ></v-file-input>
+    <v-file-input
+      v-model="formData.attachment"
+      :rules="[imgFormat(formData.attachment), imgSize(formData.attachment)]"
+      accept="image/png, image/jpeg, image/gif"
+      placeholder="Votre image"
+      prepend-icon="mdi-camera"
+      label="Votre image"
+      @change='handleFileUpload()'
+    ></v-file-input>
 
-  <div v-if="url" id="preview">
-            <img :src="url" id="preview-img"/>
-  </div>
+    <div v-if="url" id="preview">
+      <v-img  
+        :src="url"
+        max-width="1280"
+        max-height="500"
+        width="100%"
+        contain
+      ></v-img>  
+    </div>
+
+  
 
     <v-textarea v-model="formData.content"
                   label="Votre message"
@@ -25,7 +33,7 @@
                   />            
 
     <v-btn @click="submitForm(formData)" :disabled="!valid">{{ buttonText }}</v-btn>
-    <v-btn to="/messages">Annuler</v-btn>
+    <v-btn :to="'/messages/' + this.$route.params.id">Annuler</v-btn>
   </v-form>
 </template>
 
@@ -86,6 +94,8 @@
 
 #preview-img{
   max-width:1280px;
+  width: 100%;
   max-height:500px;
+  height: 100%;
 }
 </style> 

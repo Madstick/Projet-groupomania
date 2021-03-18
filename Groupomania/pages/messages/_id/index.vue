@@ -4,7 +4,10 @@
         <v-card             
           align="center"
           justify="center">
-          <p>Crée par <nuxt-link :to="'/user/' + message.idUSERS">{{ message.username }}</nuxt-link></p>
+          <p>Crée par 
+            <nuxt-link v-if="$auth.user[0].idUSERS === message.idUSERS" to="/user/profile">{{ message.username }}</nuxt-link>
+            <nuxt-link v-else :to="'/user/' + message.idUSERS">{{ message.username }}</nuxt-link>
+          </p>
           <v-card-title class="subheading font-weight-bold justify-center">
             <h1>
               {{ message.title }}
@@ -16,12 +19,13 @@
             :src="message.attachment"
             max-width="1280"
             max-height="500"
+            width="100%"
             contain
           ></v-img>
 
         <p>{{ message.content }}</p>
 
-        <v-btn @click='toggleLike'>
+        <v-btn @click='toggleLike' class="marg-btn">
           <v-icon v-if="!isUserLiked">{{likeIcon}}</v-icon>
           <v-icon v-else>{{unlikeIcon}}</v-icon>
         </v-btn>
@@ -30,10 +34,10 @@
 
         <div>
           <div>
-            <v-btn :to="'/messages/' + message.idMESSAGES + '/update'" v-if="$auth.user[0].idUSERS === message.idUSERS || ($auth.user && $auth.user[0].isAdmin)">Modifier</v-btn>
-            <v-btn @click="deleteRecord()" v-if="$auth.user[0].idUSERS === message.idUSERS || $auth.user && $auth.user[0].isAdmin">Supprimer</v-btn>
+            <v-btn :to="'/messages/' + message.idMESSAGES + '/update'" v-if="$auth.user[0].idUSERS === message.idUSERS || ($auth.user && $auth.user[0].isAdmin)" class="marg-btn">Modifier</v-btn>
+            <v-btn @click="deleteRecord()" v-if="$auth.user[0].idUSERS === message.idUSERS || $auth.user && $auth.user[0].isAdmin" class="marg-btn">Supprimer</v-btn>
           </div>
-          <v-btn to="/messages">Retour à l'accueil</v-btn>
+          <v-btn to="/messages" class="marg-btn">Retour à l'accueil</v-btn>
         </div>
         </v-card>
 
@@ -55,8 +59,8 @@
           <div v-for='message in comments' :key='message.idMESSAGES'>
             <!-- {{message}} -->
             <p>{{message.content}}</p>
-            <p>Commentaire de {{message.username}} écrit le {{message.created_at}}</p>             
-            <v-btn @click="deleteComment()" v-if="$auth.user[0].idUSERS === message.idUSERS || $auth.user && $auth.user[0].isAdmin">Supprimer</v-btn>
+            <p>Commentaire de {{message.username}} écrit le {{message.created_at|formatDate}}</p>             
+            <v-btn @click="deleteComment(message)" v-if="$auth.user[0].idUSERS === message.idUSERS || $auth.user && $auth.user[0].isAdmin">Supprimer</v-btn>
           </div>
         </div>
 
@@ -86,8 +90,7 @@ export default {
         attachment: '',
         hasAttachment:false,
         username: this.$auth.user[0].username,
-        created_at_formated: '',
-        // created_at: new Date,
+        created_at: new Date,
         message_parent:null,
         likes:0,
       },
@@ -228,39 +231,39 @@ export default {
         })
     },
 
-    // deleteComment(){
-    //   if(confirm("Êtes vous sûr?") === true){
-    //     this.$axios.delete('http://localhost:3000/api/messages/' + this.idMESSAGES)
-    //       .then((response) => {
-    //         this.$router.push('/messages/'+ this.$route.params.id ) 
-    //         this.$toast.show("Le commentaire à bien été supprimé", 
-    //         { 
-    //           position: "bottom-center", 
-    //           duration : 2000,
-    //           action : {
-    //           text : 'Fermer',
-    //           onClick : (e, toastObject) => {
-    //               toastObject.goAway(0);
-    //           }
-    //           },
-    //         });          
-    //       })
-    //       .catch( (error) => {
-    //       this.$toast.show("Il y'a eu un problème lors de la suppression du commentaire", 
-    //       { 
-    //         position: "bottom-center", 
-    //         duration : 2000,
-    //         action : {
-    //         text : 'Fermer',
-    //         onClick : (e, toastObject) => {
-    //             toastObject.goAway(0);
-    //         }
-    //         },
-    //       });  
-    //         console.log(error);
-    //       });
-    //   }
-    // },
+    deleteComment(comment){
+      if(confirm("Êtes vous sûr?") === true){
+        this.$axios.delete('http://localhost:3000/api/messages/' + comment.idMESSAGES)
+          .then((response) => {
+            this.comments.splice(comment,1)
+            this.$toast.show("Le commentaire à bien été supprimé", 
+            { 
+              position: "bottom-center", 
+              duration : 2000,
+              action : {
+              text : 'Fermer',
+              onClick : (e, toastObject) => {
+                  toastObject.goAway(0);
+              }
+              },
+            });          
+          })
+          .catch( (error) => {
+          this.$toast.show("Il y'a eu un problème lors de la suppression du commentaire", 
+          { 
+            position: "bottom-center", 
+            duration : 2000,
+            action : {
+          text : 'Fermer',
+            onClick : (e, toastObject) => {
+                toastObject.goAway(0);
+            }
+            },
+          });  
+            console.log(error);
+          });
+      }
+    },
 
     async toggleLike(){
       this.isUserLiked = !this.isUserLiked

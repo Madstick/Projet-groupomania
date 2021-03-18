@@ -17,6 +17,22 @@
               class="mx-4"
             ></v-text-field>
           </template>
+          <template v-slot:[`item.actions`]="{ item }">
+            <nuxt-link :to="'/user/' + item.idUSERS">Voir</nuxt-link>
+        
+            <span class="pad-span">
+              <span v-if="item.enabled == 0" @click="enableUser(item)">
+                Activer
+              </span>
+              <span v-else @click="disableUser(item)">
+                Désactiver
+              </span>
+            </span>
+
+            <span v-if="item.enabled == 0" @click="deleteUser(item)">
+              Supprimer
+            </span>
+          </template>
         </v-data-table>
     </div>
   </template>
@@ -59,7 +75,7 @@ export default {
         { text: 'ID utilisateur', value: 'idUSERS' },
         { text: 'E-mail', value: 'email' },
         { text: 'Privilèges', value: 'isAdmin' },
-        { text: 'Actions', sortable: false,},
+        { text: 'Actions', value:'actions',align: 'center', sortable: false,},
       ]
     },
   },  
@@ -80,9 +96,41 @@ export default {
           typeof value === 'string' && 
           value.toString().indexOf(search) !== -1
       },
+    async enableUser(user){
+      await this.$axios.post('http://localhost:3000/api/auth/' + user.idUSERS + '/enable') 
+      .then((response) => {
+          user.enabled = 1  
+        })
+        .catch((error) => {
+          console.log(error)
+        });
+    }, 
+    async disableUser(user){
+      await this.$axios.post('http://localhost:3000/api/auth/' + user.idUSERS + '/disable') 
+      .then((response) => {
+          user.enabled = 0  
+        })
+        .catch((error) => {
+          console.log(error)
+        });
+    }, 
+    async deleteUser(user){
+      if(confirm("Êtes vous sûr?") === true){
+        await this.$axios.delete('http://localhost:3000/api/auth/' + user.idUSERS ) 
+        .then((response) => {
+            this.users.splice(user, 1) 
+          })
+          .catch((error) => {
+            console.log(error)
+          });
+      }
+    }, 
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.pad-span{
+  padding: 0px 6px;
+}
 </style>
