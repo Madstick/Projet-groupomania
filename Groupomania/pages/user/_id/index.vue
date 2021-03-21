@@ -17,9 +17,7 @@
         <v-btn @click="deleteUser()" v-if="$auth.user && $auth.user[0].isAdmin" class="marg-btn">Supprimer mon compte</v-btn>
       </div>
     </div>
-
     <Loader v-else/>
-
   </div>    
 </template>
 
@@ -46,6 +44,7 @@ export default {
       console.log(this.$route.params.id)
     await this.$axios.get('http://localhost:3000/api/auth/' + this.$route.params.id) 
     .then((response) => {
+        this.isLoading=false
         console.log(response)
         this.userInfo = response.data.user[0]  
         this.$axios.get('http://localhost:3000/api/auth/' + this.$route.params.id + '/messages') 

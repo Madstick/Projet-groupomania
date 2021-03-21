@@ -1,13 +1,13 @@
 <template>
   <div v-cloak>
-    <div v-if='isLoading !== true' class="main-messages">
+    <div v-if='isLoading !== true'>
 
-    <div class="header-msg align-center">
+    <div class="header-layout">
       <svg width="420" height="120" class="svg-header">
         <image href="~/assets/icon-left-font-monochrome-black.svg" height="120" width="420" class="header-img"/>
       </svg>
-      <h1>Accueil</h1>
-      <v-btn class="btn_post" color="#207ec8" elevation="5" to="/messages/add">Poster un message</v-btn>
+      <h1>ACCUEIL</h1>
+      <v-btn class="btn-red marg-btn" elevation="5" to="/messages/add">Poster un message</v-btn>
     </div>
 
     <div>
@@ -19,12 +19,13 @@
         :sort-by="sortBy.toLowerCase()"
         :sort-desc="sortDesc"
         hide-default-footer
+        class="msg-list"
       >
         <template v-slot:header>
           <v-toolbar
             dark
             color="#091f43"
-            class="mb-6 border-red"
+            class="mb-6 custom-toolbar"
           >
             <v-text-field
               v-model="search"
@@ -69,8 +70,7 @@
                 >
                   <v-icon>mdi-arrow-down</v-icon>
                 </v-btn>
-              </v-btn-toggle>
-            
+              </v-btn-toggle>            
           </v-toolbar>
         </template>
 
@@ -83,8 +83,9 @@
               sm="6"
               md="4"
               lg="3"
+              class="index-cards"
             >
-              <v-card :to="'/messages/' + item.idMESSAGES">
+              <v-card :to="'/messages/' + item.idMESSAGES" >
                 <v-card-title class="subheading font-weight-bold justify-center">
                   <h3>
                     {{ item.title }}
@@ -288,15 +289,41 @@ export default {
 }
 </script>
 <style scoped>
-.main-messages{
-  background-color: #fafafa;
-}
-.border-red{
+.custom-toolbar{
   height: auto !important;
-  /* border-top: 2px solid #d1515a !important;
-  border-bottom: 2px solid #d1515a !important; */
 }
+.footer-right{
+  text-align: right;
+}
+.footer-right span{
+  padding-right: 7px;
+}
+.footer-left{
+  height: 104px;
+  display: flex;
+}
+.row_margin{
+  margin-left: 0;
+  margin-right: 0;
+}
+h3{
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.index-cards{
+  /* -webkit-box-shadow: 1px 1px 4px 0px #D1515A; 
+  box-shadow: 1px 1px 4px 0px #D1515A; */
+}
+.msg-list{
 
+}
+@media (max-width:768px){
+  .custom-toolbar{
+    display: flex;
+    flex-direction: column;
+  }
+}
 @media(max-width:506px){
   .footer-right{
     display: flex;
@@ -307,50 +334,5 @@ export default {
     display: flex;
     flex-direction: row;
   }
-  .svg-header{
-    width: 300px;
-    height: 70px;
-  }
-  .header-img{
-    width: 300px;
-    height: 70px;
-  }
 }
-
-.footer-right{
-  text-align: right;
-}
-
-.footer-right span{
-  padding-right: 7px;
-}
-
-.footer-left{
-  height: 104px;
-  display: flex;
-}
-
-.row_margin{
-  margin-left: 0;
-  margin-right: 0;
-}
-
-.header-msg{
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 20px 15px;
-}
-
-.btn_post{
-  color:rgba(255, 255, 255, 0.7);
-  margin-top: 15px
-}
-
-h3{
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-}
-
 </style>

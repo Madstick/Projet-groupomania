@@ -2,15 +2,22 @@
   <div v-cloak>
     <div v-if='isLoading !== true'>
       <div class="d-flex justify-center align-center flex-column">
-        <svg class="svg-header">
-          <image href="~/assets/icon-left-font.svg" class="marg-profile svg-img"/>
-        </svg>
-     
-        <h1>Compte de {{userInfo.username}}</h1>
+        <div class="header-layout">
+          <svg width="420" height="120" class="svg-header">
+            <image href="~/assets/icon-left-font-monochrome-black.svg"  height="120" width="420" class="header-img"/>
+          </svg>   
+          <div class="d-flex flex-row align-center">  
+            <v-avatar color="indigo" size="50" class="profile-icon">
+              <v-icon dark>
+                mdi-account-circle
+              </v-icon>
+            </v-avatar>
+            <h1 class="pad-username">Mon Compte</h1>
+          </div>
+        </div>
         <div class="marg-profile">
           <p class="text-center">Mes messages postés : {{userInfo.nombre_message}}</p>
         </div>
-
         <div>
           <p>Mes j'aimes : {{userInfo.nombre_likes}}</p>
         </div>    
@@ -26,10 +33,10 @@
             <thead>
               <tr>
                 <th class="text-left">
-                  Titre
+                  Titre des messages
                 </th>
                 <th class="text-left">
-                  Contenu
+                  Aperçu du contenu
                 </th>            
               </tr>
             </thead>
@@ -46,7 +53,6 @@
             </tbody>
           </template>
         </v-simple-table>
-
         <v-simple-table
           fixed-header
           height="300px"
@@ -55,8 +61,8 @@
           <template v-slot:default>
             <thead>
               <tr>
-                <th class="text-left">
-                  Titre
+                <th class="text-center">
+                  Titre des messages aimés
                 </th>             
               </tr>
             </thead>
@@ -72,15 +78,10 @@
             </tbody>
           </template>
         </v-simple-table>
-           <v-btn @click="deleteUser()" v-if="$auth.user[0] || $auth.user && $auth.user[0].isAdmin" class="marg-btn">Supprimer mon compte</v-btn>
-      </div>
-
-      
-    </div>
-    
-
-    <Loader v-else/>
-    
+           <v-btn @click="deleteUser()" v-if="$auth.user[0] || $auth.user && $auth.user[0].isAdmin" class="marg-btn btn-red">Supprimer mon compte</v-btn>
+      </div>     
+    </div>    
+    <Loader v-else/>    
   </div>    
 </template>
 
@@ -107,6 +108,7 @@ export default {
       await this.$axios.get('http://localhost:3000/api/auth/current') 
       .then((response) => {
           console.log(response)
+          this.isLoading=false
           this.userInfo = response.data.user[0]      
           })
           .catch((error) => {
@@ -164,38 +166,21 @@ export default {
 </script>
 
 <style scoped>
+.pad-username{
+  padding-left: 20px;
+}
 .hover-link{
   cursor:pointer;
 }
-.marg-profile{
-  margin-top: 24px;
-}
-
-.svg-img{
-  width: 420px;
-  height: 150px;
-}
-.svg-header{
-  height: 150px;
-  width: 420px;
-}
-
 .td-width {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
   max-width: 140px;
 }
-
 @media (max-width:420px){
-  .svg-img{
-    height: 60px;
-    width: 310px;
-  }
-  .svg-header{
-    height: 60px;
-    margin-top: 14px;
-    width: 310px;
+  .pad-username{
+  padding-left: 6px;
   }
 }
 </style>

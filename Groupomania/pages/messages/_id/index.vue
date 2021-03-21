@@ -1,15 +1,16 @@
 <template>
-  <div v-cloak>
-      <div v-if='isLoading !== true'>
+  <div v-cloak >
+      <div v-if='isLoading !== true' class="custom-container">
         <v-card             
           align="center"
-          justify="center">
-          <p>Crée par 
-            <nuxt-link v-if="$auth.user[0].idUSERS === message.idUSERS" to="/user/profile">{{ message.username }}</nuxt-link>
-            <nuxt-link v-else :to="'/user/' + message.idUSERS">{{ message.username }}</nuxt-link>
+          justify="center"
+          class="post-card">
+          <p class="msg-user">Crée par 
+            <nuxt-link v-if="$auth.user[0].idUSERS === message.idUSERS" to="/user/profile" class="msg-username">{{ message.username }}</nuxt-link>
+            <nuxt-link v-else :to="'/user/' + message.idUSERS" class="msg-username">{{ message.username }}</nuxt-link>
           </p>
           <v-card-title class="subheading font-weight-bold justify-center">
-            <h1>
+            <h1 class="no-wrap">
               {{ message.title }}
             </h1>
           </v-card-title>
@@ -34,33 +35,34 @@
 
         <div>
           <div>
-            <v-btn :to="'/messages/' + message.idMESSAGES + '/update'" v-if="$auth.user[0].idUSERS === message.idUSERS || ($auth.user && $auth.user[0].isAdmin)" class="marg-btn">Modifier</v-btn>
-            <v-btn @click="deleteRecord()" v-if="$auth.user[0].idUSERS === message.idUSERS || $auth.user && $auth.user[0].isAdmin" class="marg-btn">Supprimer</v-btn>
+            <v-btn :to="'/messages/' + message.idMESSAGES + '/update'" v-if="$auth.user[0].idUSERS === message.idUSERS || ($auth.user && $auth.user[0].isAdmin)" class="marg-btn2 btn-blue">Modifier</v-btn>
+            <v-btn @click="deleteRecord()" v-if="$auth.user[0].idUSERS === message.idUSERS || $auth.user && $auth.user[0].isAdmin" class="marg-btn2 btn-red">Supprimer</v-btn>
           </div>
           <v-btn to="/messages" class="marg-btn">Retour à l'accueil</v-btn>
         </div>
         </v-card>
 
-        <div>
+        <div class="msg-form">
           <form method="post" @submit.prevent="sendComment">
             <v-text-field
               v-model="replyMessage.content"  
               name="content"
               label="Votre commentaire"
-              id="com"         
+              id="com"                     
             >
               </v-text-field>
-            <v-btn type="submit">Envoyer</v-btn>
-            <v-btn @click="clearCom()">Annuler</v-btn>
+            <v-btn type="submit" class="marg-btn2 btn-blue">Envoyer</v-btn>
+            <v-btn @click="clearCom()" class="marg-btn2 btn-red">Annuler</v-btn>
           </form>
         </div>
 
         <div v-if='comments.length>0'>
-          <div v-for='message in comments' :key='message.idMESSAGES'>
-            <!-- {{message}} -->
-            <p>{{message.content}}</p>
-            <p>Commentaire de {{message.username}} écrit le {{message.created_at|formatDate}}</p>             
-            <v-btn @click="deleteComment(message)" v-if="$auth.user[0].idUSERS === message.idUSERS || $auth.user && $auth.user[0].isAdmin">Supprimer</v-btn>
+          <div v-for='message in comments' :key='message.idMESSAGES' class="com-layout">
+            <p class="marg-footer com-border">{{message.content}}</p>
+            <p class="text-center details-com">Par {{message.username}} le {{message.created_at|formatDate}}</p> 
+            <div class="d-flex justify-end">                      
+              <v-btn @click="deleteComment(message)" v-if="$auth.user[0].idUSERS === message.idUSERS || $auth.user && $auth.user[0].isAdmin" class="marg-btn2 btn-red">Supprimer</v-btn>
+            </div>          
           </div>
         </div>
 
@@ -74,8 +76,8 @@
 
 <script>
 import Loader from '@/components/Loader'
-import { mdiArrowUpBoldOutline } from '@mdi/js'; 
-import { mdiArrowDownBoldOutline } from '@mdi/js'; 
+import { mdiThumbUp } from '@mdi/js' ; 
+import { mdiThumbDownOutline } from '@mdi/js';
 export default {
   middleware: 'auth',
   components:{
@@ -98,8 +100,8 @@ export default {
       isLoading:true,
       errors: null,
       url: null,
-      likeIcon: mdiArrowUpBoldOutline,
-      unlikeIcon: mdiArrowDownBoldOutline,
+      likeIcon: mdiThumbUp,
+      unlikeIcon: mdiThumbDownOutline,
       isUserLiked: false,
       replyMessage:{
         content: null
@@ -318,5 +320,39 @@ export default {
 }
 </script>
 <style scoped>
-
+h1{
+  font-family: 'Anton', sans-serif;
+}
+.post-card{
+  margin: 20px;
+}
+.no-wrap{
+  word-break: initial;
+}
+.msg-form{
+  margin: 24px 10px;
+  padding: 24px 6px;
+}
+.msg-username{
+  font-family: 'Nunito', sans-serif;
+}
+.msg-user{
+  padding-top: 16px;
+}
+.details-com{
+  font-size: 14px;
+  font-style: oblique;
+}
+.com-layout{
+  padding: 6px 0px;
+  margin-bottom: 12px;
+}
+.com-border{
+  border-left:6px solid #d1515a;
+  border-radius: 0.2em;
+  padding-left: 12px;
+}
+.msg-form, .com-layout{
+  border-bottom: 1px solid black;
+}
 </style>

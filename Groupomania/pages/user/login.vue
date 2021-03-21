@@ -1,11 +1,12 @@
 <template>
-  <div>
-    <h1 class='text-center margin'>Connexion</h1>
-    <div>
-      <UserAuthForm buttonText="Connexion" :submitForm="loginUser" />
-    </div>  
-    <p class='text-center margin'>En cas d'oubli d'identifiant/mot de passe , veuillez contacter un modérateur.</p>
-    <img src="~/assets/icon-above-font.svg" class="img-marg"/>
+  <div class="custom-container">
+      <img src="~/assets/icon-above-font.svg" class="img-marg"/>
+      <h1 class='text-center margin'>Connexion</h1>
+      <div>
+        <UserAuthForm buttonText="Connexion" :submitForm="loginUser" />
+      </div>  
+      <p class='text-center margin'>En cas d'oubli d'identifiant/mot de passe , veuillez contacter un modérateur.</p>
+      
   </div>  
 </template>
 
@@ -13,7 +14,11 @@
 import UserAuthForm from '@/components/UserAuthForm'
 export default {
   components:{
-    UserAuthForm
+    UserAuthForm,
+  },
+  data() {
+    return {
+    }
   },
   methods: {
     async loginUser(loginInfo){
@@ -56,18 +61,24 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .margin{
   margin: 24px 0px;
 }
-
+.custom-container{
+  margin: 0 auto !important; 
+  padding: 0 10px;
+  max-width: 900px;
+  width: 100%;
+}
 .img-marg{
   margin-top: 24px;
+  width: 100%;
+  height: 280px;
 }
-
-@media (min-width:768px){
+@media (max-width:768px){
   .img-marg{
-    height: 380px;
+    height: 160px;
     width: 100%;
   }
 }

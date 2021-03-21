@@ -1,51 +1,64 @@
 <template>
-  <div>
-    <template>
-      <div>
-        <v-data-table
-          :headers="headers"
-          :items="users"
-          item-key="users.idUSERS"
-          class="elevation-1"
-          :search="search"
-          :custom-filter="filterText"
-        >
-          <template v-slot:top>
-            <v-text-field
-              v-model="search"
-              label="Recherche"
-              class="mx-4"
-            ></v-text-field>
-          </template>
-          <template v-slot:[`item.actions`]="{ item }">
-            <nuxt-link :to="'/user/' + item.idUSERS">Voir</nuxt-link>
-        
-            <span class="pad-span">
-              <span v-if="item.enabled == 0" @click="enableUser(item)">
-                Activer
+  <div v-cloak>
+   <div v-if='isLoading !== true'>
+      <div class="header-layout">
+        <svg width="420" height="120" class="svg-header">
+          <image href="~/assets/icon-left-font-monochrome-black.svg" height="120" width="420" class="header-img"/>
+        </svg>
+      </div>
+      <template>
+        <div>
+          <v-data-table
+            :headers="headers"
+            :items="users"
+            item-key="users.idUSERS"
+            class="elevation-1"
+            :search="search"
+            :custom-filter="filterText"
+          >
+            <template v-slot:top>
+              <v-text-field
+                v-model="search"
+                label="Recherche"
+                class="mx-4"
+              ></v-text-field>
+            </template>
+            <template v-slot:[`item.actions`]="{ item }">
+              <nuxt-link :to="'/user/' + item.idUSERS">Voir</nuxt-link>
+          
+              <span class="pad-span">
+                <span v-if="item.enabled == 0" @click="enableUser(item)">
+                  Activer
+                </span>
+                <span v-else @click="disableUser(item)">
+                  Désactiver
+                </span>
               </span>
-              <span v-else @click="disableUser(item)">
-                Désactiver
-              </span>
-            </span>
 
-            <span v-if="item.enabled == 0" @click="deleteUser(item)">
-              Supprimer
-            </span>
-          </template>
-        </v-data-table>
+              <span v-if="item.enabled == 0" @click="deleteUser(item)">
+                Supprimer
+              </span>
+            </template>
+          </v-data-table>
+        </div>
+      </template>
     </div>
-  </template>
+    <Loader v-else/>
   </div>  
 </template>
 
 <script>
+import Loader from '@/components/Loader'
 export default {
+  components:{
+    Loader
+  },
   middleware: ['auth'],
   data() {
     return {
       users:[],
       search: '',
+      isLoading:true,
     }
   },
   beforeMount() {
@@ -84,6 +97,7 @@ export default {
       await this.$axios.get('http://localhost:3000/api/auth/') 
       .then((response) => {
         console.log(response)
+        this.isLoading=false
         this.users=response.data.results     
       })
       .catch((error) => {
