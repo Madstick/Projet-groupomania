@@ -19,7 +19,6 @@
         :sort-by="sortBy.toLowerCase()"
         :sort-desc="sortDesc"
         hide-default-footer
-        class="msg-list"
       >
         <template v-slot:header>
           <v-toolbar
@@ -289,9 +288,6 @@ export default {
 }
 </script>
 <style scoped>
-.custom-toolbar{
-  height: auto !important;
-}
 .footer-right{
   text-align: right;
 }
@@ -315,8 +311,8 @@ h3{
   /* -webkit-box-shadow: 1px 1px 4px 0px #D1515A; 
   box-shadow: 1px 1px 4px 0px #D1515A; */
 }
-.msg-list{
-
+.custom-toolbar{
+  height: auto !important;
 }
 @media (max-width:768px){
   .custom-toolbar{

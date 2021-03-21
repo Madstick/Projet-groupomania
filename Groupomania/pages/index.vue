@@ -8,7 +8,7 @@
         <article id="CGU">
         <h2>Réglement :</h2>
         <v-divider></v-divider>               
-          <ol>
+          <ol class="text-left">
             <br />
             <li>Cet espace et son accès sont strictement réservés au membre du personnel de Groupomania.</li>
             <br />

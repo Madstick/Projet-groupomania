@@ -26,7 +26,7 @@
             <v-btn text to="/user/register" color="white">Inscription</v-btn>
           </div>
 
-        <!-- <div v-else>
+        <div v-else>
           <v-spacer />
           <v-menu
             bottom
@@ -45,37 +45,37 @@
 
             <v-list>
               <div v-if="$auth.loggedIn">
-                <v-list-item>
-                  <v-list-item-content><nuxt-link to='/messages'>Accueil</nuxt-link></v-list-item-content>
+                <v-list-item to='/messages'>
+                  <v-list-item-content>Accueil</v-list-item-content>
                 </v-list-item>
-                <v-list-item v-if="$auth.user && $auth.user[0].isAdmin">
-                  <v-list-item-content><nuxt-link to="/user/admin-users">Admin</nuxt-link></v-list-item-content>
+                <v-list-item v-if="$auth.user && $auth.user[0].isAdmin" to="/user/admin-users">
+                  <v-list-item-content >Admin</v-list-item-content>
                 </v-list-item>
               </div> 
               <div v-else>
-                <v-list-item>
-                  <v-list-item-content><nuxt-link to="/">Accueil</nuxt-link></v-list-item-content>
+                <v-list-item to="/">
+                  <v-list-item-content>Accueil</v-list-item-content>
                 </v-list-item>
               </div> 
               <div v-if="$auth.loggedIn">
-                <v-list-item>
-                  <v-list-item-content><nuxt-link to="/user/profile">Mon compte</nuxt-link></v-list-item-content>
+                <v-list-item to="/user/profile">
+                  <v-list-item-content>Mon compte</v-list-item-content>
                 </v-list-item>
                 <v-list-item  @click="$auth.logout()">
                   <v-list-item-content>Se déconnecter</v-list-item-content>
                 </v-list-item>
               </div>
               <div v-else>
-                <v-list-item>
-                  <nuxt-link to="/user/login">Connexion</nuxt-link>
+                <v-list-item to="/user/login">
+                  <nuxt-link>Connexion</nuxt-link>
                 </v-list-item>
-                <v-list-item>
-                  <nuxt-link to="/user/register">Inscription</nuxt-link>
+                <v-list-item to="/user/register">
+                  <nuxt-link>Inscription</nuxt-link>
                 </v-list-item>
               </div>             
             </v-list>
           </v-menu>
-        </div> -->
+        </div>
         </v-app-bar>  
 
       <v-main>
@@ -112,7 +112,6 @@
 
 <script>
   export default {
-  middleware: 'auth',
     data: () => ({
       links: [
         {label:'A propos',link:'https://www.youtube.com/watch?v=dQw4w9WgXcQ'},
