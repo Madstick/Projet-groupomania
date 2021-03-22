@@ -24,6 +24,7 @@
 <script>
 import Loader from '@/components/Loader'
 export default {
+  middleware:'auth',
   components:{
     Loader
   },

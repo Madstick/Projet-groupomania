@@ -1,20 +1,21 @@
 <template>
   <div v-cloak >
-      <div v-if='isLoading !== true' class="custom-container">
+      <div v-if='isLoading !== true' class="custom-post-container">
         <v-card             
           align="center"
           justify="center"
           class="post-card">
-          <p class="msg-user">Crée par 
-            <nuxt-link v-if="$auth.user[0].idUSERS === message.idUSERS" to="/user/profile" class="msg-username">{{ message.username }}</nuxt-link>
-            <nuxt-link v-else :to="'/user/' + message.idUSERS" class="msg-username">{{ message.username }}</nuxt-link>
-          </p>
-          <v-card-title class="subheading font-weight-bold justify-center">
-            <h1 class="no-wrap">
-              {{ message.title }}
-            </h1>
-          </v-card-title>
-
+          <div>
+            <p class="msg-user">Crée par 
+              <nuxt-link v-if="$auth.user[0].idUSERS === message.idUSERS" to="/user/profile" class="msg-username">{{ message.username }}</nuxt-link>
+              <nuxt-link v-else :to="'/user/' + message.idUSERS" class="msg-username">{{ message.username }}</nuxt-link>
+            </p>
+            <v-card-title class="subheading font-weight-bold justify-center">
+              <h1 class="no-wrap">
+                {{ message.title }}
+              </h1>
+            </v-card-title>
+          </div>
           <v-img 
             v-if="message.hasAttachment" 
             :src="message.attachment"
@@ -22,9 +23,10 @@
             max-height="500"
             width="100%"
             contain
+            class="post-img"
           ></v-img>
 
-        <p>{{ message.content }}</p>
+        <p class="marg-btn">{{ message.content }}</p>
 
         <v-btn @click='toggleLike' class="marg-btn">
           <v-icon v-if="!isUserLiked">{{likeIcon}}</v-icon>
@@ -322,9 +324,16 @@ export default {
 <style scoped>
 h1{
   font-family: 'Anton', sans-serif;
+  margin: 8px 0px;
+}
+.custom-post-container{
+  margin: 0 auto !important; 
+  padding: 0 10px;
+  max-width: 1080px;
+  width: 100%;
 }
 .post-card{
-  margin: 20px;
+  margin: 12px 0px;
 }
 .no-wrap{
   word-break: initial;
@@ -338,6 +347,11 @@ h1{
 }
 .msg-user{
   padding-top: 16px;
+  margin-bottom: 0px;
+  text-decoration: underline;
+}
+.post-img{
+  margin-bottom: 14px;
 }
 .details-com{
   font-size: 14px;

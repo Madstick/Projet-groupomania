@@ -67,10 +67,10 @@
               </div>
               <div v-else>
                 <v-list-item to="/user/login">
-                  <nuxt-link>Connexion</nuxt-link>
+                  <v-list-item-content>Connexion</v-list-item-content>
                 </v-list-item>
                 <v-list-item to="/user/register">
-                  <nuxt-link>Inscription</nuxt-link>
+                  <v-list-item-content>Inscription</v-list-item-content>
                 </v-list-item>
               </div>             
             </v-list>
@@ -220,5 +220,11 @@ h3{
 .btn-blue{
   color:rgba(255, 255, 255, 0.9) !important;
   background-color:#091f43 !important;
+}
+.v-card{
+  border: 2px outset #caedfc ;
+  border-radius: 12px;
+  -webkit-box-shadow: 4px 8px 15px -4px #000000; 
+  box-shadow: 4px 8px 15px -4px #000000;
 }
 </style>

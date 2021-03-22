@@ -82,7 +82,6 @@
               sm="6"
               md="4"
               lg="3"
-              class="index-cards"
             >
               <v-card :to="'/messages/' + item.idMESSAGES" >
                 <v-card-title class="subheading font-weight-bold justify-center">
@@ -306,10 +305,6 @@ h3{
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-}
-.index-cards{
-  /* -webkit-box-shadow: 1px 1px 4px 0px #D1515A; 
-  box-shadow: 1px 1px 4px 0px #D1515A; */
 }
 .custom-toolbar{
   height: auto !important;
