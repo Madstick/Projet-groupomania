@@ -19,7 +19,7 @@
 <script>
 import UserAuthForm from '@/components/UserAuthForm'
 export default {
-  middleware:'auth',
+  // middleware:'auth',
   components:{
     UserAuthForm,
   },

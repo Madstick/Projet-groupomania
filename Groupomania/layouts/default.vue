@@ -115,7 +115,7 @@
     data: () => ({
       links: [
         {label:'A propos',link:'https://www.youtube.com/watch?v=dQw4w9WgXcQ'},
-        {label:'Nous contacter',link:'mailto:groupomania@groupomania.com'}
+        {label:'Nous contacter',link:'mailto:groupomania@gmail.com'}
       ],
     }),
   }

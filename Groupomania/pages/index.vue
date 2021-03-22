@@ -156,7 +156,7 @@ De telles informations sont utilisées exclusivement à des fins de statistiques
 
 <script>
 export default {
-  middleware:'auth',
+  // middleware:'auth',
   components:{
   },
   data() {
