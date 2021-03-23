@@ -1,6 +1,6 @@
 <template>
   <div class="custom-container">
-      <img src="~/assets/icon-above-font.svg" class="img-marg"/>
+      <img src="~/assets/icon-above-font.svg" class="img-marg" alt="logo Groupomania alternatif"/>
       <h1 class='text-center margin'>Inscription</h1>
       <div>
         <UserAuthForm buttonText="Inscription" :submitForm="registerUser" hasName="true" />
@@ -19,12 +19,12 @@
 <script>
 import UserAuthForm from '@/components/UserAuthForm'
 export default {
-  // middleware:'auth',
   components:{
     UserAuthForm,
   },
-  data() {
-    return {
+  beforeCreate() {
+    if(this.$auth.loggedIn){
+      this.$router.push('/messages')
     }
   },
   methods: {

@@ -1,12 +1,12 @@
 <template>
   <div v-cloak>
-    <div v-if='isLoading !== true'>
+    <div v-if='isLoading !== true' class="custom-post-container">
       <div class="d-flex justify-center align-center flex-column">
         <div class="header-layout">
           <svg width="420" height="120" class="svg-header">
-            <image href="~/assets/icon-left-font-monochrome-black.svg"  height="120" width="420" class="header-img"/>
+            <image href="~/assets/icon-left-font-monochrome-black.svg"  height="120" width="420" class="header-img" alt="logo Groupomania alternatif"/>
           </svg>   
-          <div class="d-flex flex-row align-center">  
+          <div class="d-flex flex-row align-center marg-btn">  
             <v-avatar color="indigo" size="50" class="profile-icon">
               <v-icon dark>
                 mdi-account-circle
@@ -14,20 +14,12 @@
             </v-avatar>
             <h1 class="pad-username">Mon Compte</h1>
           </div>
-        </div>
-        <div class="marg-profile">
-          <p class="text-center">Mes messages postés : {{userInfo.nombre_message}}</p>
-        </div>
-        <div>
-          <p>Mes j'aimes : {{userInfo.nombre_likes}}</p>
-        </div>    
-        <!-- {{userInfo}} -->
-        <!-- {{msgInfo}} -->
-        <!-- {{likesInfo}} -->
+        </div>       
+          <h2 class="marg-h2-profile text-center">Mes messages postés : {{userInfo.nombre_message}}</h2> 
+          <p class="marg-p-profile">↓&nbsp;&nbsp;↓&nbsp;&nbsp;↓</p>
         <v-simple-table
           fixed-header
-          height="300px"
-          class="col-11"
+          class="col-12 profile-table"
         >
           <template v-slot:default>
             <thead>
@@ -40,7 +32,7 @@
                 </th>            
               </tr>
             </thead>
-            <tbody>
+            <tbody v-if="msgInfo.length > 0">
               <tr
                 v-for="item in msgInfo"
                 :key="item.name"
@@ -51,12 +43,16 @@
                 <td class="td-width">{{ item.content }}</td>
               </tr>
             </tbody>
+            <div v-else>  
+              <p class="marg-btn">Aucune donnée à afficher</p>
+            </div>  
           </template>
         </v-simple-table>
+          <h2 class="marg-h2-profile text-center">Mes j'aimes : {{userInfo.nombre_likes}}</h2>
+          <p class="marg-p-profile">↓&nbsp;&nbsp;↓&nbsp;&nbsp;↓</p>
         <v-simple-table
           fixed-header
-          height="300px"
-          class="col-8"
+          class="col-8 profile-table"
         >
           <template v-slot:default>
             <thead>
@@ -66,7 +62,7 @@
                 </th>             
               </tr>
             </thead>
-            <tbody>
+            <tbody v-if="msgInfo.length > 0">
               <tr
                 v-for="item in likesInfo"
                 :key="item.name"
@@ -76,6 +72,9 @@
                 <td class="td-width">{{ item.title }}</td>
               </tr>
             </tbody>
+            <div v-else>  
+              <p class="marg-btn">Aucune donnée à afficher</p>
+            </div>  
           </template>
         </v-simple-table>
            <v-btn @click="deleteUser()" v-if="$auth.user[0] || $auth.user && $auth.user[0].isAdmin" class="marg-btn btn-red">Supprimer mon compte</v-btn>
@@ -167,11 +166,14 @@ export default {
 </script>
 
 <style scoped>
+.marg-h2-profile{
+  margin-top : 12px;
+}
+.marg-p-profile{
+  margin-bottom: 0px;
+}
 .pad-username{
   padding-left: 20px;
-}
-.hover-link{
-  cursor:pointer;
 }
 .td-width {
   text-overflow: ellipsis;
@@ -183,5 +185,10 @@ export default {
   .pad-username{
   padding-left: 6px;
   }
+}
+.profile-table{
+  margin: 12px 0px;
+  max-height: 300px;
+  overflow-y: auto;
 }
 </style>

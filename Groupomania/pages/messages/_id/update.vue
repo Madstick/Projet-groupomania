@@ -1,8 +1,8 @@
 <template>
   <div v-cloak>
-    <div v-if='isLoading !== true'>
+    <div v-if='isLoading !== true' class="custom-post-container">
       <div>
-        <h1>Modifier votre message</h1>
+        <h1 class="text-center marg-btn">Modifier votre message</h1>
         <hr>
         <div>
           <div>

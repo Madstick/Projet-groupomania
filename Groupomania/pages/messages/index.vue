@@ -4,7 +4,7 @@
 
     <div class="header-layout">
       <svg width="420" height="120" class="svg-header">
-        <image href="~/assets/icon-left-font-monochrome-black.svg" height="120" width="420" class="header-img"/>
+        <image href="~/assets/icon-left-font-monochrome-black.svg" height="120" width="420" class="header-img" alt="logo Groupomania alternatif"/>
       </svg>
       <h1>ACCUEIL</h1>
       <v-btn class="btn-red marg-btn" elevation="5" to="/messages/add">Poster un message</v-btn>
@@ -21,43 +21,41 @@
         hide-default-footer
       >
         <template v-slot:header>
-          <v-toolbar
-            dark
-            color="#091f43"
-            class="mb-6 custom-toolbar"
-          >
+          <div class="search-header d-flex justify-space-around align-center">
+            <div class="item-header-width">
             <v-text-field
               v-model="search"
               clearable
-              flat
-              solo-inverted
+              solo
               hide-details
               prepend-inner-icon="mdi-magnify"
               label="Recherche"
+              background-color="#fafafa"                    
             ></v-text-field>
-            
-              <v-spacer></v-spacer>
+            </div>
+            <div class="d-flex item-header-width">
               <v-select
                 v-model="sortBy"
-                flat
-                solo-inverted
+                solo
                 hide-details
                 :items="keys"
                 item-text="label" 
                 item-value ="identifier"
                 prepend-inner-icon="mdi-magnify"
-                label="Trier par"                     
+                label="Trier par" 
+                background-color="#fafafa"           
               ></v-select>
-              <v-spacer></v-spacer>
+
               <v-btn-toggle
                 v-model="sortDesc"
                 mandatory
+                class="search-header-btn"
               >
                 <v-btn
                   large
                   depressed
                   color="blue"
-                  :value="false"
+                  :value="false"                  
                 >
                   <v-icon>mdi-arrow-up</v-icon>
                 </v-btn>
@@ -69,8 +67,9 @@
                 >
                   <v-icon>mdi-arrow-down</v-icon>
                 </v-btn>
-              </v-btn-toggle>            
-          </v-toolbar>
+              </v-btn-toggle>
+            </div>              
+          </div>
         </template>
 
         <template v-slot:default="props">
@@ -83,7 +82,7 @@
               md="4"
               lg="3"
             >
-              <v-card :to="'/messages/' + item.idMESSAGES" >
+              <v-card :to="'/messages/' + item.idMESSAGES" class="index-cards">
                 <v-card-title class="subheading font-weight-bold justify-center">
                   <h3>
                     {{ item.title }}
@@ -287,6 +286,21 @@ export default {
 }
 </script>
 <style scoped>
+.search-header{
+  margin-bottom: 24px;
+  padding: 4px 16px;
+  background-color: #091f43;
+  height: 64px;
+}
+.item-header-width{
+  width: 45%;
+}
+.v-btn:not(.v-btn--round).v-size--large{
+  height: auto !important;
+}
+.search-header-btn{
+  margin-left: 12px;
+}
 .footer-right{
   text-align: right;
 }
@@ -301,20 +315,29 @@ export default {
   margin-left: 0;
   margin-right: 0;
 }
+.index-cards{
+  border: 1px outset #d9ebfa ;
+  border-radius: 12px;
+  -webkit-box-shadow: 4px 8px 10px -4px #000000 !important; 
+  box-shadow: 4px 8px 10px -4px #000000 !important;
+}
 h3{
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
 }
-.custom-toolbar{
-  height: auto !important;
-}
 @media (max-width:768px){
-  .custom-toolbar{
-    display: flex;
+  .search-header{
     flex-direction: column;
+    height: 128px;
+    align-items: initial;
+    padding: 12px 6px;
   }
-}
+  .item-header-width{
+  width: 90%;
+  padding: 5px 0px;
+  }
+}  
 @media(max-width:506px){
   .footer-right{
     display: flex;
@@ -324,6 +347,12 @@ h3{
   .footer-right-icons{
     display: flex;
     flex-direction: row;
+  }
+  .search-header-btn {
+    flex-direction: column; 
+  }
+  .v-btn-toggle{
+    border-radius: 0px;
   }
 }
 </style>

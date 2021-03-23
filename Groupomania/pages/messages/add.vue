@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h1>Poster un message</h1>
+  <div class="custom-post-container">
+    <h1 class="text-center marg-btn">Poster un message</h1>
     <hr>
     <div>
       <div>

@@ -1,12 +1,9 @@
 <template>
     <v-app>
       <v-app-bar app color="#091f43">
-        <v-avatar class="logo-layout">
-          <img
-            src="~/assets/icon.svg"
-            alt="Logo groupomania"           
-          >
-        </v-avatar> 
+        <v-avatar class="logo-layout hover-link" @click="forwardHome()">
+            <img src="~/assets/icon.svg" alt="Logo groupomania">
+        </v-avatar>  
 
           <div v-if="$auth.loggedIn && $vuetify.breakpoint.smAndUp">
             <v-btn text to='/messages' color="white">Accueil</v-btn>
@@ -39,7 +36,7 @@
                 v-bind="attrs"
                 v-on="on"
               >
-                <v-icon>mdi-dots-vertical</v-icon>
+                <v-icon size="35">mdi-dots-vertical</v-icon>
               </v-btn>
             </template>
 
@@ -118,6 +115,16 @@
         {label:'Nous contacter',link:'mailto:groupomania@gmail.com'}
       ],
     }),
+    methods: {
+      forwardHome(){
+        if (this.$auth.loggedIn){
+          this.$router.push('/messages')
+        }
+        else {
+          this.$router.push('/')
+        }
+      }
+    },
   }
 </script>
 
@@ -126,6 +133,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
 .v-main__wrap{
   background-color: #fafafa;
+  background-image: url(~assets/infinite-background2.png);
+  background-repeat: repeat;
+  padding-bottom: 16px;
 }
 h1 {
   font-size: 2rem;
@@ -138,6 +148,12 @@ h3{
   margin: 0 auto !important; 
   padding: 0 10px;
   max-width: 900px;
+  width: 100%;
+}
+.custom-post-container{
+  margin: 0 auto !important; 
+  padding: 0 10px;
+  max-width: 1080px;
   width: 100%;
 }
 .d-flex{
@@ -210,9 +226,6 @@ h3{
     height: 36px !important;
   }
 }
-.marg-footer{
-  margin-top: 16px;
-}
 .btn-red{
   color:rgba(255, 255, 255, 0.9) !important;
   background-color:#d1515a !important;
@@ -221,10 +234,7 @@ h3{
   color:rgba(255, 255, 255, 0.9) !important;
   background-color:#091f43 !important;
 }
-.v-card{
-  border: 2px outset #caedfc ;
-  border-radius: 12px;
-  -webkit-box-shadow: 4px 8px 15px -4px #000000; 
-  box-shadow: 4px 8px 15px -4px #000000;
+.hover-link{
+  cursor:pointer;
 }
 </style>

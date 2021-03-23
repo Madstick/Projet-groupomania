@@ -122,7 +122,7 @@ exports.getUser = (req, res, next) => {
 
 exports.getUserMessages = (req, res, next) => {
   conn.query(
-    'SELECT * FROM messages WHERE idUSERS= ? AND message_parent IS NULL',
+    'SELECT * FROM messages WHERE idUSERS= ? AND message_parent IS NULL ORDER BY created_at DESC',
     req.params.id,
     function (error, results, fields) {
       if (error) {
@@ -135,7 +135,7 @@ exports.getUserMessages = (req, res, next) => {
 
 exports.getUserLikes = (req, res, next) => {
   conn.query(
-    'SELECT l.*,m.title FROM likes l LEFT JOIN messages m ON l.idMESSAGES=m.idMESSAGES WHERE l.idUSERS= ?',
+    'SELECT l.*,m.title FROM likes l LEFT JOIN messages m ON l.idMESSAGES=m.idMESSAGES WHERE l.idUSERS= ? ORDER BY m.created_at DESC',
     req.params.id,
     function (error, results, fields) {
       if (error) {

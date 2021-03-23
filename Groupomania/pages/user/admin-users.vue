@@ -3,16 +3,17 @@
    <div v-if='isLoading !== true'>
       <div class="header-layout">
         <svg width="420" height="120" class="svg-header">
-          <image href="~/assets/icon-left-font-monochrome-black.svg" height="120" width="420" class="header-img"/>
+          <image href="~/assets/icon-left-font-monochrome-black.svg" height="120" width="420" class="header-img" alt="logo Groupomania alternatif"/>
         </svg>
       </div>
+      <h1 class="text-center">Panel ADMIN</h1>
       <template>
         <div>
           <v-data-table
             :headers="headers"
             :items="users"
             item-key="users.idUSERS"
-            class="elevation-1"
+            class="elevation-1 marg-btn"
             :search="search"
             :custom-filter="filterText"
           >
@@ -24,20 +25,20 @@
               ></v-text-field>
             </template>
             <template v-slot:[`item.actions`]="{ item }">
-              <nuxt-link :to="'/user/' + item.idUSERS">Voir</nuxt-link>
+              <v-btn :to="'/user/' + item.idUSERS" class="pad-span">Voir</v-btn>
           
               <span class="pad-span">
-                <span v-if="item.enabled == 0" @click="enableUser(item)">
+                <v-btn v-if="item.enabled == 0" @click="enableUser(item)" color="#3ff88c">
                   Activer
-                </span>
-                <span v-else @click="disableUser(item)">
+                </v-btn>
+                <v-btn v-else @click="disableUser(item)" class="pad-span" color="#f59ca2">
                   Désactiver
-                </span>
+                </v-btn>
               </span>
 
-              <span v-if="item.enabled == 0" @click="deleteUser(item)">
+              <v-btn v-if="item.enabled == 0" @click="deleteUser(item)" class="pad-span btn-red">
                 Supprimer
-              </span>
+              </v-btn>
             </template>
           </v-data-table>
         </div>
@@ -145,6 +146,6 @@ export default {
 
 <style lang="scss" scoped>
 .pad-span{
-  padding: 0px 6px;
+  margin: 2px 2px;
 }
 </style>

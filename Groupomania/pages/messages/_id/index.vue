@@ -33,7 +33,7 @@
           <v-icon v-else>{{unlikeIcon}}</v-icon>
         </v-btn>
 
-        <p>J'aimes :{{message.likes}}</p>
+        <p>J'aimes: {{message.likes}}</p>
 
         <div>
           <div>
@@ -60,10 +60,10 @@
 
         <div v-if='comments.length>0'>
           <div v-for='message in comments' :key='message.idMESSAGES' class="com-layout">
-            <p class="marg-footer com-border">{{message.content}}</p>
-            <p class="text-center details-com">Par {{message.username}} le {{message.created_at|formatDate}}</p> 
-            <div class="d-flex justify-end">                      
-              <v-btn @click="deleteComment(message)" v-if="$auth.user[0].idUSERS === message.idUSERS || $auth.user && $auth.user[0].isAdmin" class="marg-btn2 btn-red">Supprimer</v-btn>
+            <p class="marg-footer">{{message.content}}</p>            
+            <div class="d-flex align-center justify-space-between">   
+              <p class="text-center details-com">Par <nuxt-link :to="'/user/' + message.idUSERS" class="msg-username">{{ message.username }}</nuxt-link> le {{message.created_at|formatDate}}</p>                   
+              <v-btn @click="deleteComment(message)" v-if="$auth.user[0].idUSERS === message.idUSERS || $auth.user && $auth.user[0].isAdmin" class="marg-btn2 btn-red d-flex justify-end">Supprimer</v-btn>
             </div>          
           </div>
         </div>
@@ -122,7 +122,7 @@ export default {
       }
         console.log(response)
         this.message = response.data.results[0];
-        if(this.message.myLikes === 1 ){
+        if(this.message.myLikes > 0 ){
           this.isUserLiked = true
         }
         if(this.message.attachment){
@@ -326,12 +326,6 @@ h1{
   font-family: 'Anton', sans-serif;
   margin: 8px 0px;
 }
-.custom-post-container{
-  margin: 0 auto !important; 
-  padding: 0 10px;
-  max-width: 1080px;
-  width: 100%;
-}
 .post-card{
   margin: 12px 0px;
 }
@@ -356,15 +350,14 @@ h1{
 .details-com{
   font-size: 14px;
   font-style: oblique;
+  margin-bottom: 0px;
 }
 .com-layout{
-  padding: 6px 0px;
+  background-color: white;
+  padding: 6px 8px;
   margin-bottom: 12px;
-}
-.com-border{
-  border-left:6px solid #d1515a;
-  border-radius: 0.2em;
-  padding-left: 12px;
+  border: 1px solid grey;
+  border-radius: 0.5em;
 }
 .msg-form, .com-layout{
   border-bottom: 1px solid black;
