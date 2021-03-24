@@ -84,9 +84,9 @@
             >
               <v-card :to="'/messages/' + item.idMESSAGES" class="index-cards">
                 <v-card-title class="subheading font-weight-bold justify-center">
-                  <h3>
+                  <h2>
                     {{ item.title }}
-                  </h3>
+                  </h2>
                 </v-card-title>
 
                 <v-img 
@@ -321,10 +321,12 @@ export default {
   -webkit-box-shadow: 4px 8px 10px -4px #000000 !important; 
   box-shadow: 4px 8px 10px -4px #000000 !important;
 }
-h3{
+h2{
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  font-family: 'Anton', sans-serif;
+  font-size: 1.3em;
 }
 @media (max-width:768px){
   .search-header{
