@@ -61,7 +61,7 @@
           <p><strong>Adresse</strong> : 15b Rue de la Galère, 60350 ATTICHY</p>
           <p><strong>Site Web</strong> : www.flawstudio.fr</p>
           <h4>Conditions d’utilisation :</h4>
-          <div class="text-left">
+          <div class="text-left tiny-text">
             <p>Ce site (www.groupomania.fr) est proposé en différents langages web (HTML, HTML5, Javascript, CSS, etc…) pour un meilleur confort d’utilisation et un graphisme plus agréable.</p>
             <p>Nous vous recommandons de recourir à des navigateurs modernes comme Internet explorer, Safari, Firefox, Google Chrome, etc…</p>
             <p>L’agence web flawstudio met en œuvre tous les moyens dont elle dispose, pour assurer une information fiable et une mise à jour fiable de ses sites internet.</p>
@@ -120,5 +120,11 @@ h3{
 }
 h4{
   margin-bottom: 16px;
+}
+.tiny-text{
+  font-size: 0.8em;
+}
+.tiny-text p{
+  margin-bottom: 4px;
 }
 </style>
