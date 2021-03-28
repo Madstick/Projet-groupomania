@@ -9,6 +9,7 @@ nodemon server
 front-end 
 
 npm install
-npm run dev
+npm run build
+npm run start
 
 et sql...

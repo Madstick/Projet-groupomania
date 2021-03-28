@@ -18,6 +18,7 @@
         :search="search"
         :sort-by="sortBy.toLowerCase()"
         :sort-desc="sortDesc"
+        :custom-filter="customFilter"
         hide-default-footer
       >
         <template v-slot:header>
@@ -97,7 +98,7 @@
 
                 <v-list dense>
                   <v-list-item
-                    v-for="(key, index) in filteredKeys"
+                    v-for="(key, index) in keys"
                     :key="index"
                   >
                     <v-list-item-content>
@@ -212,20 +213,25 @@ export default {
       itemsPerPageArray: [10, 15, 25],
       search: '',
       filter: {},
-      sortDesc: false,
+      sortDesc: true,
       page: 1,
       itemsPerPage: 10,
-      sortBy: 'name',
+      sortBy: 'created_at',
       keys: [
         {
-        identifier: 'created_at',
-        label: 'Date de création'
+          identifier: 'created_at',
+          label: 'Date de création'
         },
         {
-        identifier: 'likes',
-        label: 'J\'aimes'
+          identifier: 'likes',
+          label: 'J\'aimes'
         }
-        ],
+      ],
+      searchMsg:[
+        'title',
+        'content',
+        'username',
+      ],
       isLoading:true,
       errors: null,
       url: null,
@@ -238,15 +244,11 @@ export default {
     numberOfPages () {
       return Math.ceil(this.messages.length / this.itemsPerPage)
     },
-    filteredKeys () {
-      return this.keys.filter(key => key !== 'title')
-    },
   },
   methods:{
     async asyncData(){
     await this.$axios.get('http://localhost:3000/api/messages/') 
     .then((response) => {
-        console.log(response)
         this.messages = response.data.results   
         this.isLoading=false    
       if(this.$route.params.deleted=='yes'){
@@ -281,6 +283,21 @@ export default {
     },
     updateItemsPerPage (number) {
       this.itemsPerPage = number
+    },
+    customFilter(items,search) {
+      if (search === null){
+        search=''
+      }
+      return items.filter(item => {
+        let find=false;
+        this.searchMsg.forEach(column => {
+          if (item[column] && find === false){
+            let lowerValue = item[column].toString().toLowerCase()
+            find=lowerValue.includes(search.toLowerCase())
+          }
+        });
+        return find
+      })
     },
   }
 }
