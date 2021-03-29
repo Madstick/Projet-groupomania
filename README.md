@@ -21,10 +21,11 @@ Modifiez la clé dans le fichier authconfig.js dans Api/config au besoin
 Accéder au dossier api
 Lancer les commandes :
 
-    npm install
+    npm install   
     nodemon server
 
 ### Front-end 
 
     npm install
+    npm run build
     npm run start
