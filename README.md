@@ -1,15 +1,30 @@
+# Projet n°7 - Parcours Développeur Web - OpenClassrooms
 # Groupomania
-Projet Groupomania
 
-backend 
+### Base de données:
 
-npm install
-nodemon server
+La structure de la base de données se trouve dans le dossier :
 
-front-end 
+    MySql/groupomania_db.sql
 
-npm install
-npm run build
-npm run start
+Il faut modifier le fichier .env dans le dossier Api à vos besoins :
 
-et sql...
+    DB_HOST=localhost
+    DB_USER="username du serveur SQL"
+    DB_PASS="password du serveur SQL"
+    DB_DATABASE="nom de la base de données"
+
+### Backend 
+
+Modifiez la clé dans le fichier authconfig.js dans Api/config au besoin
+
+Accéder au dossier api
+Lancer les commandes :
+
+    npm install
+    nodemon server
+
+### Front-end 
+
+    npm install
+    npm run start
