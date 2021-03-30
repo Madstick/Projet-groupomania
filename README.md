@@ -27,5 +27,4 @@ Lancer les commandes :
 ### Front-end 
 
     npm install
-    npm run build
     npm run start
