@@ -3,12 +3,12 @@ export default {
   head: {
     title: 'Groupomania',
     htmlAttrs: {
-      lang: "fr",  // language Francais    
+      lang: 'fr',
     },
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' },
+      { hid: 'description', name: 'description', content: 'Site interne de l\'entreprise Groupomania' },
     ],
     link: [{ rel: 'shortcut icon', type: 'image/x-icon', href: '/favicon.png' }],
   },
@@ -35,8 +35,17 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/auth',
     '@nuxtjs/pwa',
-    '@nuxtjs/toast'
+    '@nuxtjs/toast',
+    'nuxt-i18n',
   ],
+
+  i18n: {
+    locale: 'fr',
+    defaultLocale: 'fr',
+    vueI18n: {
+      fallbackLocale: 'fr',
+    }
+  },
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
@@ -84,6 +93,6 @@ export default {
 
    toast: {
     position: 'bottom-center',
-}
+  }
 
 }
