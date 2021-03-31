@@ -13,8 +13,8 @@ try {
             title: req.body.title,
             content: req.body.content,
             attachment: req.file 
-                ? req.file.filename
-                :null,
+                ? req.file.filename // ? = if  ( opération ternaire )
+                :null, // : = else
             created_at: new Date(),
             message_parent:
                 req.body.message_parent !== null && req.body.message_parent !== 'null'
@@ -31,7 +31,6 @@ try {
                 console.log(error);
                 return res.status(400).json(error)
             }
-            // console.log(results)
             return res.status(201).json({
                 message: 'Votre message a bien été posté !',
                 id:results.insertId
@@ -48,9 +47,8 @@ exports.getMessage = (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1]
     const decodedToken = jwt.verify(token, config.token)
     const userId = decodedToken.userId
-    // console.log(req.params.id)
     conn.query("SELECT messages.*, COUNT(likes.idUSERS) AS 'likes', COUNT(myLikes.idUSERS) AS 'myLikes' FROM messages LEFT JOIN likes ON messages.idMESSAGES = likes.idMESSAGES LEFT JOIN likes myLikes ON messages.idMESSAGES = myLikes.idMESSAGES AND myLikes.idUSERS= ? AND myLikes.idMESSAGES= ? WHERE messages.idMESSAGES= ? GROUP BY messages.idMESSAGES ORDER BY messages.created_at DESC", 
-        [userId,idMessage,idMessage], function (
+        [userId,idMessage,idMessage], function (  // esprintf avec les ? de la requête pour éviter la concaténation 
         error,
         results,
         fields
@@ -58,7 +56,6 @@ exports.getMessage = (req, res, next) => {
         if (error) {
             return res.status(400).json(error)
         }
-        // console.log(results)
         return res.status(201).json({
             message: 'Le message a bien été vu',
             results
@@ -77,7 +74,6 @@ exports.getComment = (req, res, next) => {
         if (error) {
             return res.status(400).json(error)
         }
-        // console.log(results)
         return res.status(201).json({
             results
         })

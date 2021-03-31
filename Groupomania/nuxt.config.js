@@ -2,15 +2,11 @@ export default {
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
     title: 'Groupomania',
-    htmlAttrs: {
-      lang: 'fr',
-    },
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: 'Site interne de l\'entreprise Groupomania' },
     ],
-    link: [{ rel: 'shortcut icon', type: 'image/x-icon', href: '/favicon.png' }],
   },
 
   // Global CSS (https://go.nuxtjs.dev/config-css)
@@ -36,17 +32,7 @@ export default {
     '@nuxtjs/auth',
     '@nuxtjs/pwa',
     '@nuxtjs/toast',
-    'nuxt-i18n',
   ],
-
-  i18n: {
-    locale: 'fr',
-    defaultLocale: 'fr',
-    vueI18n: {
-      fallbackLocale: 'fr',
-    }
-  },
-
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
     baseUrl: process.env.BASE_URL || 'http://localhost:3000/api'
@@ -60,39 +46,46 @@ export default {
   },
 
   auth: {
-     strategies: {
-       local: {
-         endpoints: {
-           login: {
-             url: 'http://localhost:3000/api/auth/login',
-             method: 'post',
-             propertyName: 'token'
-           },
-           logout: {              
+    strategies: {
+      local: {
+        endpoints: {
+          login: {
+            url: 'http://localhost:3000/api/auth/login',
+            method: 'post',
+            propertyName: 'token'
+          },
+          logout: {              
             url: 'http://localhost:3000/api/auth/logout',
             method: 'get',
             propertyName: 'token'
-         },
-           user: {
-             url: 'http://localhost:3000/api/auth/current',
-             method: 'get',
-             propertyName: 'user'
-           }
-         },
-         tokenRequired: true,
-         tokenType: "Bearer"
-       }
-     },
-     redirect: {
-       login: '/user/login', // User will be redirected to this path if login is required
-       logout: '/', // User will be redirected to this path if after logout, current route is protected
-       home: '/messages' // User will be redirect to this path after login if accessed login page directly
-     },
-     rewriteRedirects: true,
-   },
+          },
+          user: {
+            url: 'http://localhost:3000/api/auth/current',
+            method: 'get',
+            propertyName: 'user'
+          }
+        },
+        tokenRequired: true,
+        tokenType: "Bearer"
+      }
+    },
+    redirect: {
+      login: '/user/login', // User will be redirected to this path if login is required
+      logout: '/', // User will be redirected to this path if after logout, current route is protected
+      home: '/messages' // User will be redirect to this path after login if accessed login page directly
+    },
+    rewriteRedirects: true,
+  },
 
-   toast: {
+  toast: {
     position: 'bottom-center',
-  }
+  },
+
+  pwa: {
+    manifest: {
+      lang: 'fr',
+    },
+    icon: false
+  },
 
 }

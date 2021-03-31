@@ -150,7 +150,7 @@ exports.disableUser = (req, res, next) => {
   const token = req.headers.authorization.split(' ')[1]
   const decodedToken = jwt.verify(token, config.token)
   console.log(decodedToken.userId,req.params.id)
-  if((decodedToken.role === 'admin' && decodedToken.userId !== parseInt(req.params.id) ) || decodedToken.userId === parseInt(req.params.id) ){
+  if((decodedToken.role === 'admin' && decodedToken.userId !== parseInt(req.params.id) ) || decodedToken.userId === parseInt(req.params.id) ){ // On vérifie que l'utilisateur n'est pas lui-même et qu'il est admin
     conn.query(
       "UPDATE users SET enabled = 0 WHERE idUSERS=?",
       req.params.id,
@@ -167,7 +167,6 @@ exports.disableUser = (req, res, next) => {
       }
     )
   }
-  // return res.status(401).json({ message: 'Supression non autorisée' })
 }
 
 exports.enableUser = (req, res, next) => {
@@ -187,7 +186,6 @@ exports.enableUser = (req, res, next) => {
       }
     )
   }
-  // return res.status(401).json({ message: 'Restauration non autorisée' })
 }
 
 exports.deleteUser = (req, res, next) => {
@@ -207,5 +205,4 @@ exports.deleteUser = (req, res, next) => {
       }
     )
   }
-  // return res.status(401).json({ message: 'Supression non autorisée' })
 }
