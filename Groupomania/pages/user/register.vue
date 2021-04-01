@@ -49,7 +49,7 @@ export default {
         this.$router.push('/messages')
       }
       catch(error){
-      this.$toast.show("Il y'a eu un problème au moment de l'inscription, veuillez réessayer", 
+      this.$toast.show("Il y'a eu un problème au moment de l'inscription, veuillez réessayer. Le nom d'utilisateur ou l'email sont peut être déja utilisés", 
       { 
         position: "bottom-center", 
         duration : 2000,
