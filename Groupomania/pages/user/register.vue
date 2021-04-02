@@ -52,7 +52,7 @@ export default {
       this.$toast.show("Il y'a eu un problème au moment de l'inscription, veuillez réessayer. Le nom d'utilisateur ou l'email sont peut être déja utilisés", 
       { 
         position: "bottom-center", 
-        duration : 2000,
+        duration : 5000,
         action : {
         text : 'Fermer',
         onClick : (e, toastObject) => {
