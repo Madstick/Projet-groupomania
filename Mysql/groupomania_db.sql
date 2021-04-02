@@ -16,21 +16,24 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `likes`
+-- Table structure for table `users`
 --
 
-DROP TABLE IF EXISTS `likes`;
+DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `likes` (
-  `idUSERS` int NOT NULL,
-  `idMESSAGES` int NOT NULL,
-  PRIMARY KEY (`idUSERS`,`idMESSAGES`),
-  KEY `fk_LIKES_MESSAGES_idx` (`idMESSAGES`),
-  KEY `fk_LIKES_USERS_idx` (`idUSERS`),
-  CONSTRAINT `fk_LIKES_MESSAGES` FOREIGN KEY (`idMESSAGES`) REFERENCES `messages` (`idMESSAGES`) ON DELETE CASCADE,
-  CONSTRAINT `fk_LIKES_USERS` FOREIGN KEY (`idUSERS`) REFERENCES `users` (`idUSERS`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `users` (
+  `idUSERS` int NOT NULL AUTO_INCREMENT,
+  `email` varchar(50) NOT NULL,
+  `username` varchar(60) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `isAdmin` tinyint NOT NULL DEFAULT '0',
+  `enabled` tinyint NOT NULL DEFAULT '1',
+  PRIMARY KEY (`idUSERS`),
+  UNIQUE KEY `uniqueUser_Id` (`idUSERS`),
+  UNIQUE KEY `unique_Email` (`email`),
+  UNIQUE KEY `unique_Username` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -60,24 +63,21 @@ CREATE TABLE `messages` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `users`
+-- Table structure for table `likes`
 --
 
-DROP TABLE IF EXISTS `users`;
+DROP TABLE IF EXISTS `likes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `users` (
-  `idUSERS` int NOT NULL AUTO_INCREMENT,
-  `email` varchar(50) NOT NULL,
-  `username` varchar(60) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `isAdmin` tinyint NOT NULL DEFAULT '0',
-  `enabled` tinyint NOT NULL DEFAULT '1',
-  PRIMARY KEY (`idUSERS`),
-  UNIQUE KEY `uniqueUser_Id` (`idUSERS`),
-  UNIQUE KEY `unique_Email` (`email`),
-  UNIQUE KEY `unique_Username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `likes` (
+  `idUSERS` int NOT NULL,
+  `idMESSAGES` int NOT NULL,
+  PRIMARY KEY (`idUSERS`,`idMESSAGES`),
+  KEY `fk_LIKES_MESSAGES_idx` (`idMESSAGES`),
+  KEY `fk_LIKES_USERS_idx` (`idUSERS`),
+  CONSTRAINT `fk_LIKES_MESSAGES` FOREIGN KEY (`idMESSAGES`) REFERENCES `messages` (`idMESSAGES`) ON DELETE CASCADE,
+  CONSTRAINT `fk_LIKES_USERS` FOREIGN KEY (`idUSERS`) REFERENCES `users` (`idUSERS`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
