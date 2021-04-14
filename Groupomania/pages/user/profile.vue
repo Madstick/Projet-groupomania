@@ -136,7 +136,7 @@ export default {
       if(confirm("Êtes vous sûr?") === true){
         this.$axios.post('http://localhost:3000/api/auth/' + this.$auth.user[0].idUSERS + '/disable')       
           .then((response) => {
-            if($auth.user[0].isAdmin){
+            if(this.$auth.user[0].isAdmin){
               this.$router.push({ name:'user-admin-users' })    
             }
               this.$auth.logout()       

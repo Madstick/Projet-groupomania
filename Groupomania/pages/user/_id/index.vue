@@ -77,7 +77,6 @@
             </div>  
           </template>
         </v-simple-table>
-           <v-btn @click="deleteUser()" v-if="$auth.user && $auth.user[0].isAdmin" class="marg-btn btn-red">Supprimer ce compte</v-btn>
       </div>     
     </div>    
     <Loader v-else/>    
