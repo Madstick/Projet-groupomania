@@ -145,6 +145,9 @@ export default {
       console.log(error)
     });
     },
+    linktoMessage(message){
+      this.$router.push('/messages/' + message.idMESSAGES)
+    }
   }
 }
 
