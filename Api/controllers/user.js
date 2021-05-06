@@ -14,10 +14,9 @@ exports.signup = (req, res, next) => {
       fields
     ) {
       if (error) {
-        // Si erreur de la requête
-        console.log(error) // La console du serveur affiche l'erreur
+        console.log(error) 
         return res.status(400).json(error.sqlMessage)
-      } // Et retourne uniquement le message de l'erreur au front
+      } 
       return res.status(201).json({
         message:
           'Votre compte a bien été créé ! Vous pouvez maintenant vous connecter.'
