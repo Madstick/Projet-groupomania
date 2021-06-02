@@ -133,7 +133,7 @@ export default {
       if(confirm("Êtes vous sûr?") === true){
         await this.$axios.delete('http://localhost:3000/api/auth/' + user.idUSERS ) 
         .then((response) => {
-            this.users.splice(user, 1) 
+            this.users.splice(this.users.indexOf(user), 1) 
           })
           .catch((error) => {
             console.log(error)
