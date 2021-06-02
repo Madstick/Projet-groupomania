@@ -56,10 +56,12 @@ exports.getMessage = (req, res, next) => {
         if (error) {
             return res.status(400).json(error)
         }
-        return res.status(201).json({
-            message: 'Le message a bien été vu',
-            results
-        })
+        else{
+            return res.status(201).json({
+                message: 'Le message a bien été vu',
+                results
+            })
+        }
     })
 }
 
@@ -74,9 +76,11 @@ exports.getComment = (req, res, next) => {
         if (error) {
             return res.status(400).json(error)
         }
-        return res.status(201).json({
-            results
-        })
+        else{
+            return res.status(201).json({
+                results
+            })
+        }
     })
 }
 
@@ -91,7 +95,9 @@ exports.getAllMessages = (req, res, next) => {
             if (error) {
                 return res.status(400).json(error)
             }
-            return res.status(200).json({results})
+            else{
+                return res.status(200).json({results})
+            }
         }
     )
 }
@@ -108,40 +114,42 @@ exports.modifyMessage = (req, res, next) => {
             if (error) {
                 return res.status(400).json(error)
             }
-            const messageId = results[0].idUSERS
-            if (userId !== messageId && role !== 'admin') {
-                return res.status(401).json({message: 'Accès non autorisé'})
-            }
-            let updatedMessage = req.body
-            if (req.file){
-                updatedMessage.attachment = req.file 
-                ? req.file.filename
-                :null
-                const attachment = results[0].attachment
-                if(attachment) {
-                    fs.unlinkSync(`images/${attachment}`)
+            else{
+                const messageId = results[0].idUSERS
+                if (userId !== messageId && role !== 'admin') {
+                    return res.status(401).json({message: 'Accès non autorisé'})
                 }
-            }
-            console.log(updatedMessage)
-            updatedMessage.message_parent =
-            req.body.message_parent !== null && req.body.message_parent !== 'null'
-                ? parseInt(req.body.message_parent)
-                :null  
-            conn.query(
-                'UPDATE messages SET ? WHERE idMESSAGES=?',
-                [updatedMessage, req.params.id],
-                function (error, results, fields) {
-                    if (error) {
-                        return res.status(400).json(error)
+                let updatedMessage = req.body
+                if (req.file){
+                    updatedMessage.attachment = req.file 
+                    ? req.file.filename
+                    :null
+                    const attachment = results[0].attachment
+                    if(attachment) {
+                        fs.unlinkSync(`images/${attachment}`)
                     }
-                    return res
-                        .status(200)
-                        .json({
-                            message: 'Votre message a bien été modifié !',
-                            id:req.params.id
-                        })
                 }
-            )
+                console.log(updatedMessage)
+                updatedMessage.message_parent =
+                req.body.message_parent !== null && req.body.message_parent !== 'null'
+                    ? parseInt(req.body.message_parent)
+                    :null  
+                conn.query(
+                    'UPDATE messages SET ? WHERE idMESSAGES=?',
+                    [updatedMessage, req.params.id],
+                    function (error, results, fields) {
+                        if (error) {
+                            return res.status(400).json(error)
+                        }
+                        return res
+                            .status(200)
+                            .json({
+                                message: 'Votre message a bien été modifié !',
+                                id:req.params.id
+                            })
+                    }
+                )
+            }
         }
     )
 }
@@ -158,26 +166,28 @@ exports.deleteMessage = (req, res, next) => {
             if (error) {
                 return res.status(400).json(error)
             }
-            const messageIdUser = results[0].idUSERS
-            if (userId !== messageIdUser && role !== 'admin') {
-                return res.status(401).json({message: 'Accès non autorisé'})
-            }
-            const filename = results[0].attachment
-            if(filename){
-                fs.unlinkSync(`images/${filename}`)
-            } 
-            conn.query(
-                `DELETE FROM messages WHERE idMESSAGES=?`,
-                req.params.id,
-                function (error, results, fields) {
-                    if (error) {
-                        return res.status(400).json(error)
-                    }         
-                    return res
-                        .status(200)
-                        .json({message: 'Votre message a bien été supprimé !'})
+            else{
+                const messageIdUser = results[0].idUSERS
+                if (userId !== messageIdUser && role !== 'admin') {
+                    return res.status(401).json({message: 'Accès non autorisé'})
                 }
-            )
+                const filename = results[0].attachment
+                if(filename){
+                    fs.unlinkSync(`images/${filename}`)
+                } 
+                conn.query(
+                    `DELETE FROM messages WHERE idMESSAGES=?`,
+                    req.params.id,
+                    function (error, results, fields) {
+                        if (error) {
+                            return res.status(400).json(error)
+                        }         
+                        return res
+                            .status(200)
+                            .json({message: 'Votre message a bien été supprimé !'})
+                    }
+                )
+            }
         }
     )
 }
@@ -194,7 +204,9 @@ exports.addLike = (req, res, next) => {
         if (error) {
             return res.status(400).json(error)
         }
-        return res.status(201).json({message: 'Votre like a bien été ajouté !'})
+        else{
+            return res.status(201).json({message: 'Votre like a bien été ajouté !'})
+        }
     })
 }
 
@@ -208,9 +220,11 @@ exports.removeLike = (req, res, next) => {
             if (error) {
                 return res.status(400).json(error)
             }
-            return res
+            else{
+                return res
                 .status(200)
                 .json({message: 'Votre like a bien été supprimé !'})
+            }
         }
     )
 }

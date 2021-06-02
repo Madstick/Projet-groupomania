@@ -15,12 +15,14 @@ exports.signup = (req, res, next) => {
     ) {
       if (error) {
         console.log(error) 
-        return res.status(400).json(error.sqlMessage)
+        return res.status(400).send(error.sqlMessage)
+      }
+      else {
+        return res.status(201).json({
+          message:
+            'Votre compte a bien été créé ! Vous pouvez maintenant vous connecter.'
+        }) 
       } 
-      return res.status(201).json({
-        message:
-          'Votre compte a bien été créé ! Vous pouvez maintenant vous connecter.'
-      })
     })
   })
 }
@@ -89,7 +91,9 @@ exports.getAllUsers = (req, res, next) => {
       if (error) {
         return res.status(400).json(error)
       }
-      return res.status(200).json({ results })
+      else{
+        return res.status(200).json({ results })
+      }
     }
   )
 }
@@ -109,12 +113,14 @@ exports.getUser = (req, res, next) => {
     userId,
     function (error, results, fields) {
       if (error) {
-        return res.status(400).json(error)
+        return res.status(500).json(error)
       }
-      if (results[0].idUSERS === null ){
-        return res.status(404).json("Utilisateur introuvable")
+      else{
+        if (results[0].idUSERS === null ){
+          return res.status(404).json("Utilisateur introuvable")
+        }
+        return res.status(200).json({ user:results })
       }
-      return res.status(200).json({ user:results })
     }
   )
 }
@@ -127,7 +133,9 @@ exports.getUserMessages = (req, res, next) => {
       if (error) {
         return res.status(400).json(error)
       }
-      return res.status(200).json({ msg:results })
+      else{
+        return res.status(200).json({ msg:results })
+      }
     }
   )
 }
@@ -140,7 +148,9 @@ exports.getUserLikes = (req, res, next) => {
       if (error) {
         return res.status(400).json(error)
       }
-      return res.status(200).json({ likes:results })
+      else{
+        return res.status(200).json({ likes:results })
+      }
     }
   )
 }
@@ -158,11 +168,13 @@ exports.disableUser = (req, res, next) => {
         if (error) {
           return res.status(400).json(error)
         }
-        if (decodedToken.userId === req.params.id){
-        }        
-        return res
-          .status(200)
-          .json({ message: 'Le compte a bien été supprimé !' })
+        else{
+          if (decodedToken.userId === req.params.id){
+          }        
+          return res
+            .status(200)
+            .json({ message: 'Le compte a bien été supprimé !' })
+        }
       }
     )
   }
@@ -179,9 +191,11 @@ exports.enableUser = (req, res, next) => {
         if (error) {
           return res.status(400).json(error)
         }
-        return res
+        else{
+          return res
           .status(200)
           .json({ message: 'Le compte a bien été restauré !' })
+        }
       }
     )
   }
