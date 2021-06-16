@@ -31,10 +31,12 @@ try {
                 console.log(error);
                 return res.status(400).json(error)
             }
-            return res.status(201).json({
-                message: 'Votre message a bien été posté !',
-                id:results.insertId
-            })
+            else{
+                return res.status(201).json({
+                    message: 'Votre message a bien été posté !',
+                    id:results.insertId
+                })
+            }
         })
     }
 
