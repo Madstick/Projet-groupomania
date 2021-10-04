@@ -1,10 +1,14 @@
 <template>
   <div class="custom-post-container">
     <h1 class="text-center marg-btn">Poster un message</h1>
-    <hr>
+    <hr />
     <div>
       <div>
-        <MsgForm buttonText="Envoyer" :submitForm="submitForm" :message="message"/>
+        <MsgForm
+          button-text="Envoyer"
+          :submit-form="submitForm"
+          :message="message"
+        />
       </div>
     </div>
   </div>
@@ -14,10 +18,10 @@
 import MsgForm from '@/components/MsgForm'
 export default {
   middleware: 'auth',
-  components:{
-    MsgForm
+  components: {
+    MsgForm,
   },
-  data(){
+  data() {
     return {
       message: {
         title: null,
@@ -35,7 +39,7 @@ export default {
       formData.append('content', msgInfo.content)
       formData.append('message_parent', null)
       formData.append('username', this.$auth.user[0].username)
-      if (msgInfo.attachment){
+      if (msgInfo.attachment) {
         formData.append('attachment', msgInfo.attachment)
       }
 
@@ -46,34 +50,32 @@ export default {
           },
         })
         .then((response) => {
-          console.log(response)
           if (response.id) {
-            this.$toast.show("Le message à bien été crée", 
-            { 
-              position: "bottom-center", 
-              duration : 2000,
-              action : {
-              text : 'Fermer',
-              onClick : (e, toastObject) => {
-                  toastObject.goAway(0);
-              }
+            this.$toast.show('Le message à bien été crée', {
+              position: 'bottom-center',
+              duration: 2000,
+              action: {
+                text: 'Fermer',
+                onClick: (e, toastObject) => {
+                  toastObject.goAway(0)
+                },
               },
-            });
-            this.$router.push('/messages/'+ response.id)
+            })
+            this.$router.push('/messages/' + response.id)
           }
         })
         .catch((error) => {
-          this.$toast.show("Il y'a eu un problème lors de l'envoi du message", 
-          { 
-            position: "bottom-center", 
-            duration : 2000,
-            action : {
-            text : 'Fermer',
-            onClick : (e, toastObject) => {
-                toastObject.goAway(0);
-            }
+          console.log(error)
+          this.$toast.show("Il y'a eu un problème lors de l'envoi du message", {
+            position: 'bottom-center',
+            duration: 2000,
+            action: {
+              text: 'Fermer',
+              onClick: (e, toastObject) => {
+                toastObject.goAway(0)
+              },
             },
-          });
+          })
         })
     },
   },

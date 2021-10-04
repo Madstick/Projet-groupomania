@@ -22,7 +22,6 @@
         <h2 class="marg-h2-profile text-center">
           Mes messages postés : {{ userInfo.nombre_message }}
         </h2>
-        <p class="marg-p-profile">↓&nbsp;&nbsp;↓&nbsp;&nbsp;↓</p>
         <v-simple-table fixed-header class="col-12 profile-table">
           <template v-slot:default>
             <thead>
@@ -35,8 +34,8 @@
               <tr
                 v-for="item in msgInfo"
                 :key="item.name"
-                @click="linktoMessage(item)"
                 class="hover-link"
+                @click="linktoMessage(item)"
               >
                 <td class="td-width">{{ item.title }}</td>
                 <td class="td-width">{{ item.content }}</td>
@@ -50,7 +49,6 @@
         <h2 class="marg-h2-profile text-center">
           Mes j'aimes : {{ userInfo.nombre_likes }}
         </h2>
-        <p class="marg-p-profile">↓&nbsp;&nbsp;↓&nbsp;&nbsp;↓</p>
         <v-simple-table fixed-header class="col-8 profile-table">
           <template v-slot:default>
             <thead>
@@ -62,8 +60,8 @@
               <tr
                 v-for="item in likesInfo"
                 :key="item.name"
-                @click="linktoMessage(item)"
                 class="hover-link"
+                @click="linktoMessage(item)"
               >
                 <td class="td-width">{{ item.title }}</td>
               </tr>
@@ -74,9 +72,9 @@
           </template>
         </v-simple-table>
         <v-btn
-          @click="deleteUser()"
           v-if="$auth.user[0] || ($auth.user && $auth.user[0].isAdmin)"
           class="marg-btn btn-red"
+          @click="deleteUser()"
           >Supprimer mon compte</v-btn
         >
       </div>
@@ -183,11 +181,15 @@ export default {
 </script>
 
 <style scoped>
+th {
+  background-color: #eaeaea !important;
+}
+.col-12,
+.col-8 {
+  padding: 0px;
+}
 .marg-h2-profile {
   margin-top: 12px;
-}
-.marg-p-profile {
-  margin-bottom: 0px;
 }
 .pad-username {
   padding-left: 20px;

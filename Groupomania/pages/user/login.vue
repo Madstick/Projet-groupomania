@@ -7,7 +7,7 @@
     />
     <h1 class="text-center margin">Connexion</h1>
     <div>
-      <UserAuthForm buttonText="Connexion" :submitForm="loginUser" />
+      <UserAuthForm button-text="Connexion" :submit-form="loginUser" />
     </div>
     <p class="text-center margin">
       En cas d'oubli d'identifiant/mot de passe , veuillez contacter un
