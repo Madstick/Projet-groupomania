@@ -1,165 +1,169 @@
 <template>
   <div v-cloak>
-    <div v-if='isLoading !== true' class="custom-post-container">
+    <div v-if="isLoading !== true" class="custom-post-container">
       <div class="d-flex justify-center align-center flex-column">
         <div class="header-layout">
           <svg width="420" height="120" class="svg-header">
-            <image href="~/assets/icon-left-font-monochrome-black.svg"  height="120" width="420" class="header-img" alt="logo Groupomania alternatif"/>
-          </svg>   
-          <div class="d-flex flex-row align-center marg-btn">  
+            <image
+              href="~/assets/icon-left-font-monochrome-black.svg"
+              height="120"
+              width="420"
+              class="header-img"
+              alt="logo Groupomania alternatif"
+            />
+          </svg>
+          <div class="d-flex flex-row align-center marg-btn">
             <v-avatar color="green" size="50" class="profile-icon">
-              <v-icon dark>
-                mdi-account-circle
-              </v-icon>
+              <v-icon dark> mdi-account-circle </v-icon>
             </v-avatar>
-            <h1 class="pad-username">Compte de {{userInfo.username}}</h1>
+            <h1 class="pad-username">Compte de {{ userInfo.username }}</h1>
           </div>
-        </div>       
-          <h2 class="marg-h2-profile text-center">Messages postés : {{userInfo.nombre_message}}</h2> 
-          <p class="marg-p-profile">↓&nbsp;&nbsp;↓&nbsp;&nbsp;↓</p>
-        <v-simple-table
-          fixed-header
-          class="col-12 profile-table"
-        >
+        </div>
+        <h2 class="marg-h2-profile text-center">
+          Messages postés : {{ userInfo.nombre_message }}
+        </h2>
+        <p class="marg-p-profile">↓&nbsp;&nbsp;↓&nbsp;&nbsp;↓</p>
+        <v-simple-table fixed-header class="col-12 profile-table">
           <template v-slot:default>
             <thead>
               <tr>
-                <th class="text-left">
-                  Titre des messages
-                </th>
-                <th class="text-left">
-                  Aperçu du contenu
-                </th>            
+                <th class="text-left">Titre des messages</th>
+                <th class="text-left">Aperçu du contenu</th>
               </tr>
             </thead>
             <tbody v-if="msgInfo.length > 0">
               <tr
                 v-for="item in msgInfo"
                 :key="item.name"
-                @click="linktoMessage(item)"
                 class="hover-link"
-              >              
+                @click="linktoMessage(item)"
+              >
                 <td class="td-width">{{ item.title }}</td>
                 <td class="td-width">{{ item.content }}</td>
               </tr>
             </tbody>
-            <div v-else>  
+            <div v-else>
               <p class="marg-btn">Aucune donnée à afficher</p>
-            </div>  
+            </div>
           </template>
         </v-simple-table>
-          <h2 class="marg-h2-profile text-center">J'aimes : {{userInfo.nombre_likes}}</h2>
-          <p class="marg-p-profile">↓&nbsp;&nbsp;↓&nbsp;&nbsp;↓</p>
-        <v-simple-table
-          fixed-header
-          class="col-8 profile-table"
-        >
+        <h2 class="marg-h2-profile text-center">
+          J'aimes : {{ userInfo.nombre_likes }}
+        </h2>
+        <p class="marg-p-profile">↓&nbsp;&nbsp;↓&nbsp;&nbsp;↓</p>
+        <v-simple-table fixed-header class="col-8 profile-table">
           <template v-slot:default>
             <thead>
               <tr>
-                <th class="text-center">
-                  Titre des messages aimés
-                </th>             
+                <th class="text-center">Titre des messages aimés</th>
               </tr>
             </thead>
             <tbody v-if="msgInfo.length > 0">
               <tr
                 v-for="item in likesInfo"
                 :key="item.name"
-                @click="linktoMessage(item)"
                 class="hover-link"
-              >              
+                @click="linktoMessage(item)"
+              >
                 <td class="td-width">{{ item.title }}</td>
               </tr>
             </tbody>
-            <div v-else>  
+            <div v-else>
               <p class="marg-btn">Aucune donnée à afficher</p>
-            </div>  
+            </div>
           </template>
         </v-simple-table>
-      </div>     
-    </div>    
-    <Loader v-else/>    
-  </div>    
+      </div>
+    </div>
+    <Loader v-else />
+  </div>
 </template>
 
 <script>
 import Loader from '@/components/Loader'
 export default {
-  middleware:'auth',
-  components:{
-    Loader
+  middleware: 'auth',
+  components: {
+    Loader,
   },
   data() {
     return {
-      userInfo:{},
-      msgInfo:[],
-      likesInfo:[],
-      isLoading:true,
+      userInfo: {},
+      msgInfo: [],
+      likesInfo: [],
+      isLoading: true,
     }
   },
-  mounted(){
+  mounted() {
     this.asyncData()
-  }
-  ,
-  methods:{
-    async asyncData(){
+  },
+  methods: {
+    async asyncData() {
       console.log(this.$route.params.id)
-    await this.$axios.get('http://localhost:3000/api/auth/' + this.$route.params.id) 
-    .then((response) => {
-        this.isLoading=false
-        console.log(response)
-        this.userInfo = response.data.user[0]  
-        this.$axios.get('http://localhost:3000/api/auth/' + this.$route.params.id + '/messages') 
+      await this.$axios
+        .get('http://localhost:3000/api/auth/' + this.$route.params.id)
         .then((response) => {
-            console.log(response)
-            this.msgInfo = response.data.msg     
+          this.isLoading = false
+          console.log(response)
+          this.userInfo = response.data.user[0]
+          this.$axios
+            .get(
+              'http://localhost:3000/api/auth/' +
+                this.$route.params.id +
+                '/messages'
+            )
+            .then((response) => {
+              console.log(response)
+              this.msgInfo = response.data.msg
             })
             .catch((error) => {
               console.log(error)
             })
-        this.$axios.get('http://localhost:3000/api/auth/' + this.$route.params.id + '/likes') 
-        .then((response) => {
-            console.log(response)
-            this.likesInfo = response.data.likes      
+          this.$axios
+            .get(
+              'http://localhost:3000/api/auth/' +
+                this.$route.params.id +
+                '/likes'
+            )
+            .then((response) => {
+              console.log(response)
+              this.likesInfo = response.data.likes
             })
             .catch((error) => {
               console.log(error)
-            })     
-    this.isLoading=false           
-    })
-    .catch((error) => {
-      this.$toast.show("Utilisateur introuvable", 
-      { 
-        position: "bottom-center", 
-        duration : 2000,
-        action : {
-        text : 'Fermer',
-        onClick : (e, toastObject) => {
-            toastObject.goAway(0);
-        }
-        },
-      });
-      this.$router.push('/messages')
-      console.log(error)
-    });
+            })
+          this.isLoading = false
+        })
+        .catch((error) => {
+          this.$toast.show('Utilisateur introuvable', {
+            position: 'bottom-center',
+            duration: 2000,
+            action: {
+              text: 'Fermer',
+              onClick: (e, toastObject) => {
+                toastObject.goAway(0)
+              },
+            },
+          })
+          this.$router.push('/messages')
+          console.log(error)
+        })
     },
-    linktoMessage(message){
+    linktoMessage(message) {
       this.$router.push('/messages/' + message.idMESSAGES)
-    }
-  }
+    },
+  },
 }
-
 </script>
 
 <style scoped>
-.marg-h2-profile{
-  margin-top : 12px;
+.marg-h2-profile {
+  margin-top: 12px;
 }
-.marg-p-profile{
+.marg-p-profile {
   margin-bottom: 0px;
 }
-.pad-username{
+.pad-username {
   padding-left: 20px;
 }
 .td-width {
@@ -168,12 +172,12 @@ export default {
   overflow: hidden;
   max-width: 140px;
 }
-@media (max-width:420px){
-  .pad-username{
-  padding-left: 6px;
+@media (max-width: 420px) {
+  .pad-username {
+    padding-left: 6px;
   }
 }
-.profile-table{
+.profile-table {
   margin: 12px 0px;
   max-height: 300px;
   overflow-y: auto;

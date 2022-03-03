@@ -41,7 +41,7 @@
           <v-icon v-else>{{ unlikeIcon }}</v-icon>
         </v-btn>
 
-        <p>J'aimes: {{ message.likes }}</p>
+        <p>J'aime: {{ message.likes }}</p>
 
         <div>
           <div>
